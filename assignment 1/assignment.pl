@@ -43,12 +43,26 @@ same_name(C, GP) :-
 
 % Q3, Empty list
 sqrt_list([], []).
-% Only one element
+% One or more elements
 sqrt_list([H|T], R) :-
     sqrt_list(T, L),
     R = [[H, S] | L],
     S is sqrt(H).
 
-% Q4,
+% Q4, Empty list
+sign_runs([], []).
+% One element
+sign_runs([X], [X]).
+% More than one (we need to compare two consecutive)
+sign_runs([H, S | T], R) :-
+    M > 0,
+    M is H * S,
+    sign_runs(T, L),
+    R = [H, S | L].
+sign_runs([H, S | T], R) :-
+    M < 0,
+    M is H * S,
+    sign_runs([S | T], L),
+    R = [[H] | L].
 
 % Q5, 
