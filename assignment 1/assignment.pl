@@ -15,23 +15,39 @@ sumsq_even([H|T], Sum) :-
     1 is H mod 2.
 
 % Q2, Same person same name
-same_name(N1, N2) :-
-    N1 == N2.
-% N1 is the parent of N2 or vice versa and a male parent
-same_name(N1, N2) :-
-    parent(N1, N2),
-    male(N1).
-same_name(N1, N2) :-
-    parent(N2, N1),
-    male(N2).
+same_name(P1, P2) :-
+    P1 == P2.
 % Same Parent and male parent
-same_name(N1, N2) :-
-    parent(X, N1),
-    parent(X, N2),
-    male(X).
-% GRANDPARENT???
+same_name(C1, C2) :-
+    parent(P, C1),
+    parent(P, C2),
+    male(P).
+% father of C
+same_name(P, C) :-
+    parent(P, C),
+    male(P).
+same_name(C, P) :-
+    parent(P, C),
+    male(P).
+% grandfather of C
+same_name(GP, C) :-
+    parent(GP, P),
+    male(GP),
+    parent(P, C),
+    male(P).
+same_name(C, GP) :-
+    parent(GP, P),
+    male(GP),
+    parent(P, C),
+    male(P).
 
-% Q3, 
+% Q3, Empty list
+sqrt_list([], []).
+% Only one element
+sqrt_list([H|T], R) :-
+    sqrt_list(T, L),
+    R = [[H, S] | L],
+    S is sqrt(H).
 
 % Q4,
 
