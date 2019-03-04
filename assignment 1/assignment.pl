@@ -5,7 +5,6 @@
 
 % Q1, Handle nothing or one element
 sumsq_even([], 0).
-
 % Loop through the list and sum the square of even numbers
 sumsq_even([H|T], EvenSum) :-
     sumsq_even(T, Sum),
@@ -16,6 +15,7 @@ sumsq_even([H|T], Sum) :-
     1 is H mod 2.
 
 % Q2, 
+same_name(N1, N2).
 
 % Q3, 
 
