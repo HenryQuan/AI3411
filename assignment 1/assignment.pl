@@ -14,22 +14,23 @@ sumsq_even([H|T], Sum) :-
     sumsq_even(T, Sum),
     1 is H mod 2.
 
-% Q2, Same Parent and male parent
+% Q2, Same person same name
 same_name(N1, N2) :-
-    parent(X, N1),
-    parent(X, N2),
-    male(X).
-% N1 is the parent of N2 and he is a male
+    N1 == N2.
+% N1 is the parent of N2 or vice versa and a male parent
 same_name(N1, N2) :-
     parent(N1, N2),
     male(N1).
 same_name(N1, N2) :-
     parent(N2, N1),
     male(N2).
-% Same person same name
+% Same Parent and male parent
 same_name(N1, N2) :-
-    N1 == N2.
-    
+    parent(X, N1),
+    parent(X, N2),
+    male(X).
+% GRANDPARENT???
+
 % Q3, 
 
 % Q4,
