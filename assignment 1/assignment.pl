@@ -46,7 +46,7 @@ sqrt_list([], []).
 % One or more elements
 sqrt_list([H|T], R) :-
     sqrt_list(T, L),
-    R = [[H, S] | L],
+    R = [[H | S] | L],
     S is sqrt(H).
 
 % Q4, Empty list
@@ -54,15 +54,17 @@ sign_runs([], []).
 % One element
 sign_runs([X], [X]).
 % More than one (we need to compare two consecutive)
-sign_runs([H, S | T], R) :-
+sign_runs([F, S | T], R) :-
+    % Same sign
     M > 0,
-    M is H * S,
-    sign_runs(T, L),
-    R = [H, S | L].
-sign_runs([H, S | T], R) :-
-    M < 0,
-    M is H * S,
+    M is F * S,
+    % handle the rest
     sign_runs([S | T], L),
-    R = [[H] | L].
+    R = [[F] | L].
+
+sign_runs([F, S | T], R) :-
+    F >= 0, S < 0.
+sign_runs([F, S | T], R) :-
+    S >= 0, F < 0.
 
 % Q5, 
