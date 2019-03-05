@@ -54,13 +54,12 @@ sign_runs([], []).
 % One element
 sign_runs([X], [X]).
 % All you need to know is when to split (when signs are different)
-sign_runs([F, S | T], [H | R]) :-
-    % Same sign
+sign_runs([F, S | T], R) :-
     M is F * S,
     M > 0,
-    % handle the rest
     sign_runs(T, L),
-    H = [H, F, S],
-    R = L.
-    
-% Q5, 
+    R is [[F | S] | L].
+
+% Q5, Binary Tree
+empty().
+tree(L, Num, R).
