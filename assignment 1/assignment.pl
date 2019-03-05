@@ -52,8 +52,8 @@ sqrt_list([H|T], R) :-
 % Q4, Empty list
 sign_runs([], []).
 % One element
-sign_runs([X], [[X]]).
-% More than one (we need to compare two consecutive)
+sign_runs([X], [X]).
+% All you need to know is when to split (when signs are different)
 sign_runs([F, S | T], [H | R]) :-
     % Same sign
     M is F * S,
@@ -62,10 +62,5 @@ sign_runs([F, S | T], [H | R]) :-
     sign_runs(T, L),
     H = [H, F, S],
     R = L.
-
-sign_runs([F, S | T], R) :-
-    F >= 0, S < 0.
-sign_runs([F, S | T], R) :-
-    S >= 0, F < 0.
-
+    
 % Q5, 
