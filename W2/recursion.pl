@@ -6,3 +6,9 @@ descendant(Person, Descendant) :-
 descendant(Person, Descendant) :-
     parent(Person, Child),
     descendant(Child, Descendant).
+
+ancestor(Person, Ancestor) :-
+    parent(Ancestor, Person).
+ancestor(Person, Ancestor) :-
+    parent(Ancestor, Parent),
+    ancestor(Person, Parent).
