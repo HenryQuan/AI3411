@@ -33,3 +33,7 @@ later(date(_, Month1, Year), date(_, Month2, Year)) :-
     Month1 > Month2.
 later(date(_, _, Year1), date(_, _, Year2)) :-
     Year1 > Year2.
+
+% Test the new predicate by finding those climbs which were first climbed before "High n Dry". 
+% climb(N, _, _, D), later(date(1, 4,2001), D).
+% climb('High n Dry', _, _, D1), climb(C, _, _, D2), later(D1, D2).
