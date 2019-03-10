@@ -57,3 +57,9 @@ is_member(Element, list(_, Tail)) :-
 cons([], L, L).
 cons([H1 | T1], L2, [H1 | Rest]) :-
     cons(T1, L2, Rest).
+
+% findall is quite powerful...
+% findall(D, descendant(albert,D), List).
+
+children(Parent, ChildList) :-
+    findall(Child, parent(Parent,Child), ChildList).
