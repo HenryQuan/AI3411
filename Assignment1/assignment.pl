@@ -14,31 +14,26 @@ sumsq_even([H|T], Sum) :-
     sumsq_even(T, Sum),
     1 is H mod 2.
 
+% P1 is an ancestor of P2
+ancestor(P1, P2) :-
+    parent(P1, P2).
+ancestor(P1, P2) :-
+    parent(P1, Child),
+    ancestor(Child, P2).
+
 % Q2, Same person same name
 same_name(P, P).
-
-% Same Parent and male parent
-same_name(C1, C2) :-
-    parent(P, C1),
-    parent(P, C2),
-    male(P).
-% father of C
+% Same male ancestor
+same_name(P1, P2) :-
+    ancestor(A, P1),
+    ancestor(A, P2),
+    male(A).
+% Ancestor of C
 same_name(P, C) :-
-    parent(P, C),
+    ancestor(P, C),
     male(P).
 same_name(C, P) :-
-    parent(P, C),
-    male(P).
-% grandfather of C
-same_name(GP, C) :-
-    parent(GP, P),
-    male(GP),
-    parent(P, C),
-    male(P).
-same_name(C, GP) :-
-    parent(GP, P),
-    male(GP),
-    parent(P, C),
+    ancestor(P, C),
     male(P).
 
 % Q3, Empty list
