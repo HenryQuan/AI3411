@@ -39,12 +39,10 @@ same_name(C, P) :-
 % Q3, Empty list
 sqrt_list([], []).
 % One or more elements
-sqrt_list([H|T], R) :-
+sqrt_list([H|T], [[H, S] | R]) :-
     % negative sqrt is not valid
-    H > 0,
-    sqrt_list(T, L),
-    R = [[H , S] | L],
-    S is sqrt(H).
+    H >= 0, S is sqrt(H),
+    sqrt_list(T, R).
 
 % Q4, Empty list
 sign_runs([], []).
