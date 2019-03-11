@@ -15,8 +15,8 @@ sumsq_even([H|T], Sum) :-
     1 is H mod 2.
 
 % Q2, Same person same name
-same_name(P1, P2) :-
-    P1 == P2.
+same_name(P, P).
+
 % Same Parent and male parent
 same_name(C1, C2) :-
     parent(P, C1),
@@ -45,6 +45,8 @@ same_name(C, GP) :-
 sqrt_list([], []).
 % One or more elements
 sqrt_list([H|T], R) :-
+    % negative sqrt is not valid
+    H > 0,
     sqrt_list(T, L),
     R = [[H , S] | L],
     S is sqrt(H).
