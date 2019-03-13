@@ -53,16 +53,23 @@ sqrt_list([H | T], [[H, S] | R]) :-
     sqrt_list(T, R).
 
 % --- Q4 ---
+% my own append function (I cannot think of another method)
+my_append([], N, [N]).
+my_append([H | T], N, [H | R]) :- 
+    my_append(T, N, R).
+
+% get the last element from a list
+last_list([], []).
+last_list([L], L).
+last_list([H | T], R) :-
+    last_list(T, R).
 
 % Empty list
 sign_runs([], []).
-sign_split([], [], []).
-sign_split([F, S | T], [F | L1], L2) :-
+sign_runs([F, S | T], R) :-
     F >= 0, S >= 0,
-    sign_split([S | T], L1, L2),
-sign_split([F, S | T], [F | L1], [S | L2]) :-
-    F >= 0, S < 0,
-    sign_split([S | T], L1, L2),
+    sign_runs([S | T], [[F], R]),
+    R is [F, T].
 
 % --- Q5 ---
 
