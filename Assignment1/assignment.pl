@@ -68,10 +68,8 @@ last_list([_ | T], R) :-
 sign_runs([], []).
 sign_runs([X], [X]).
 % When to split and when to merge
-sign_runs([X, Y | Z], [[X, Y] | Z]) :- X >= 0, Y >= 0.
-sign_runs([X, Y | Z], [[X, Y] | Z]) :- X < 0, Y < 0.
-sign_runs([X, Y | Z], [[X], [Y] | Z]) :- X >= 0, Y < 0.
-sign_runs([X, Y | Z], [[X], [Y] | Z]) :- X < 0, Y >= 0.
+sign_runs([X, Y | Z], [[X | [Y | Z]]]) :- X >= 0, Y >= 0 ; X < 0, Y < 0.
+sign_runs([X, Y | Z], [[X], [Y] | Z]) :- X >= 0, Y < 0 ; X < 0, Y >= 0.
 
 % --- Q5 ---
 
