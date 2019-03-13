@@ -61,15 +61,18 @@ my_append([H | T], N, [H | R]) :-
 % get the last element from a list
 last_list([], []).
 last_list([L], L).
-last_list([H | T], R) :-
+last_list([_ | T], R) :-
     last_list(T, R).
 
 % Empty list
 sign_runs([], []).
+sign_runs(X, [X]).
 sign_runs([F, S | T], R) :-
-    F >= 0, S >= 0,
-    sign_runs([S | T], [[F], R]),
-    R is [F, T].
+    M > 0, M = F * S,
+    sign_runs([S | T], R).
+sign_runs([F, S | T], R) :-
+    M < 0, M = F * S,
+    sign_runs([S | T], R).
 
 % --- Q5 ---
 
