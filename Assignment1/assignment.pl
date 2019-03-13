@@ -67,9 +67,30 @@ last_list([_ | T], R) :-
 % Empty list
 sign_runs([], []).
 sign_runs([X], [X]).
+sign_runs(L, R) :- sign_runs_temp(L, R, _).
+sign_runs_temp([X], C, [X | R]) :- sign_runs_temp([], C, R).
+sign_runs_temp([F, S | T], C, [F | R]) :-
+    F >= 0, S >= 0,
+    sign_runs_temp([S | T], C, R).
+sign_runs_temp([F, S | T], C, [F | R]) :-
+    F < 0, S < 0,
+    sign_runs_temp([S | T], C, R).
 % When to split and when to merge
-sign_runs([X, Y | Z], [[X | [Y | Z]]]) :- X >= 0, Y >= 0 ; X < 0, Y < 0.
-sign_runs([X, Y | Z], [[X], [Y] | Z]) :- X >= 0, Y < 0 ; X < 0, Y >= 0.
+sign_runs_temp([F, S | T], [R | L], R) :-
+    F >= 0, S < 0,
+    sign_runs_temp([S | T], L, []).
+sign_runs_temp([F, S | T], [R | L], R) :-
+    F < 0, S >= 0,
+    sign_runs_temp([S | T], L, []).
+
+test([], [], []).
+test([X], [], [X]).
+test([F, S | T], A, [F | R]) :-
+    F >= 0,
+    test([S | T], A, R).
+test([F, S | T], [F | R], A) :-
+    F < 0,
+    test([S | T], R, A).
 
 % --- Q5 ---
 
