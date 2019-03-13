@@ -1,5 +1,7 @@
 /*
-    This is the first assignment of COMP3411 T1
+    This is the first assignment of COMP3411 T1,
+    mainly prolog questions.
+
     Yiheng Quan Z5098268
 */
 
@@ -54,7 +56,13 @@ sqrt_list([H | T], [[H, S] | R]) :-
 
 % Empty list
 sign_runs([], []).
-sign_split([[], L1, L2]) :-
+sign_split([], [], []).
+sign_split([F, S | T], [F | L1], L2) :-
+    F >= 0, S >= 0,
+    sign_split([S | T], L1, L2),
+sign_split([F, S | T], [F | L1], [S | L2]) :-
+    F >= 0, S < 0,
+    sign_split([S | T], L1, L2),
 
 % --- Q5 ---
 
