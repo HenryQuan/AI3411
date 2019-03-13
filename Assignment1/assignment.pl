@@ -66,13 +66,12 @@ last_list([_ | T], R) :-
 
 % Empty list
 sign_runs([], []).
-sign_runs(X, [X]).
-sign_runs([F, S | T], R) :-
-    M > 0, M = F * S,
-    sign_runs([S | T], R).
-sign_runs([F, S | T], R) :-
-    M < 0, M = F * S,
-    sign_runs([S | T], R).
+sign_runs([X], [X]).
+% When to split and when to merge
+sign_runs([X, Y | Z], [[X, Y] | Z]) :- X >= 0, Y >= 0.
+sign_runs([X, Y | Z], [[X, Y] | Z]) :- X < 0, Y < 0.
+sign_runs([X, Y | Z], [[X], [Y] | Z]) :- X >= 0, Y < 0.
+sign_runs([X, Y | Z], [[X], [Y] | Z]) :- X < 0, Y >= 0.
 
 % --- Q5 ---
 
