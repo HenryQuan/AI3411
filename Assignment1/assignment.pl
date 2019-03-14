@@ -60,9 +60,7 @@ append_new([H | T], N, [H | R]) :-
     append_new(T, N, R).
 
 % append new item to the last item in the list
-append_last([], N, [N]).
-append_last([L], N, R) :-
-    append_new(L, N, R).
+append_last([L], N, [R]) :- append_new(L, N, R).
 append_last([H | T], N, [H | R]) :-
     append_last(T, N, R).
 
