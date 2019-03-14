@@ -53,10 +53,11 @@ sqrt_list([H | T], [[H, S] | R]) :-
     sqrt_list(T, R).
 
 % --- Q4 ---
-% my own append function (I cannot think of another method)
-my_append([], N, [N]).
-my_append([H | T], N, [H | R]) :- 
-    my_append(T, N, R).
+% flip the whole list
+flip([], []).
+flip([F | T], [R | L]) :-
+    reverse(F, R),
+    flip(T, L).
 
 % check if same sign (all positive or all negative)
 same_sign(X, X).
@@ -65,18 +66,21 @@ same_sign(X, Y) :- X < 0, Y < 0.
 
 % Empty list
 sign_runs([], []).
-sign_runs([X], [X]).
+sign_runs([], F).
 % use sign_runs to solve this question
 sign_runs(L, R) :- sign_runs(L, R, []).
 
-sign_runs([], L, []).
+% flip the list
+sign_runs(F, L, []) :-
+    flip(L, R), reverse(R, F).
+
 % handle last item, empty result
 sign_runs([L], [], [F | T]) :-
     same_sign(L, F),
-    sign_runs([], [], [L, F | T]).
+    sign_runs([], [L, F | T], []).
 sign_runs([L], [], [F | T]) :-
     not(same_sign(L, F)),
-    sign_runs([], [], [[L] | [F | T]]).
+    sign_runs([], [[L] | [F | T]], []).
 % handle last item, some items
 sign_runs([L], C, [F | T]) :-
     same_sign(L, F),
