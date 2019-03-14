@@ -69,20 +69,35 @@ sign_runs([X], [X]).
 % use sign_runs to solve this question
 sign_runs(L, R) :- sign_runs(L, R, []).
 
-% handle last item
+sign_runs([], L, []).
+% handle last item, empty result
 sign_runs([L], [], [F | T]) :-
     same_sign(L, F),
-    sign_runs([], [L, F | T], []).
+    sign_runs([], [], [L, F | T]).
 sign_runs([L], [], [F | T]) :-
     not(same_sign(L, F)),
-    sign_runs([], [[L] | [F | T]], []).
-% empty list
+    sign_runs([], [], [[L] | [F | T]]).
+% handle last item, some items
+sign_runs([L], C, [F | T]) :-
+    same_sign(L, F),
+    sign_runs([], [[L, F | T] | C], []).
+sign_runs([L], C, [F | T]) :-
+    not(same_sign(L, F)),
+    sign_runs([], [[L], [F | T] | C], []).
+% empty result list
 sign_runs([F, S | T], [], []) :-
     same_sign(F, S),
     sign_runs([S | T], [], [F]).
 sign_runs([F, S | T], [], []) :-
     not(same_sign(F, S)),
     sign_runs([S | T], [F], []).
+% empty temp list
+sign_runs([F, S | T], C, []) :-
+    same_sign(F, S),
+    sign_runs([S | T], C, [F]).
+sign_runs([F, S | T], C, []) :-
+    not(same_sign(F, S)),
+    sign_runs([S | T], [[F] | C], []).
 % some items
 sign_runs([F, S | T], C, R) :-
     same_sign(F, S),
