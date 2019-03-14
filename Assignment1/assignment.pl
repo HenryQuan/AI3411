@@ -53,14 +53,20 @@ sqrt_list([H | T], [[H, S] | R]) :-
     sqrt_list(T, R).
 
 % --- Q4 ---
-% flip the whole list
-flip([], []).
-flip([F | T], [R | L]) :-
-    reverse(F, R),
-    flip(T, L).
+
+% append new item to list
+append_new([], N, [N]).
+append_new([H | T], N, [H | R]) :-
+    append_new(T, N, R).
+
+% append new item to the last item in the list
+append_last([], N, [N]).
+append_last([L], N, R) :-
+    append_new(L, N, R).
+append_last([H | T], N, [H | R]) :-
+    append_last(T, N, R).
 
 % check if same sign (all positive or all negative)
-same_sign(X, X).
 same_sign(X, Y) :- X >= 0, Y >= 0.
 same_sign(X, Y) :- X < 0, Y < 0.
 
