@@ -64,11 +64,14 @@ last_list([L], L).
 last_list([_ | T], R) :-
     last_list(T, R).
 
+% check if same sign (all positive or all negative)
+same_sign(X, Y) :- X >= 0, Y >= 0.
+same_sign(X, Y) :- X < 0, Y < 0.
+
 % Empty list
 sign_runs([], []).
 sign_runs([X], [X]).
-sign_runs(L, R) :- sign_runs_temp(L, R, _).
-sign_runs_temp([X], C, [X | R]) :- sign_runs_temp([], C, R).
+sign_runs(L, R) :- sign_runs_temp(L, R, []).
 sign_runs_temp([F, S | T], C, [F | R]) :-
     F >= 0, S >= 0,
     sign_runs_temp([S | T], C, R).
