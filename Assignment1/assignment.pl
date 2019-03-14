@@ -58,42 +58,39 @@ my_append([], N, [N]).
 my_append([H | T], N, [H | R]) :- 
     my_append(T, N, R).
 
-% get the last element from a list
-last_list([], []).
-last_list([L], L).
-last_list([_ | T], R) :-
-    last_list(T, R).
-
 % check if same sign (all positive or all negative)
+same_sign(X, X).
 same_sign(X, Y) :- X >= 0, Y >= 0.
 same_sign(X, Y) :- X < 0, Y < 0.
 
 % Empty list
-sign_runs([], []).
 sign_runs([X], [X]).
-sign_runs(L, R) :- sign_runs_temp(L, R, []).
-sign_runs_temp([F, S | T], C, [F | R]) :-
-    F >= 0, S >= 0,
-    sign_runs_temp([S | T], C, R).
-sign_runs_temp([F, S | T], C, [F | R]) :-
-    F < 0, S < 0,
-    sign_runs_temp([S | T], C, R).
-% When to split and when to merge
-sign_runs_temp([F, S | T], [R | L], R) :-
-    F >= 0, S < 0,
-    sign_runs_temp([S | T], L, []).
-sign_runs_temp([F, S | T], [R | L], R) :-
-    F < 0, S >= 0,
-    sign_runs_temp([S | T], L, []).
+sign_runs(X, X).
+% use sign_runs_plus to solve this question
+sign_runs(L, R) :- sign_runs_plus(L, R, []).
 
-test([], [], []).
-test([X], [], [X]).
-test([F, S | T], A, [F | R]) :-
-    F >= 0,
-    test([S | T], A, R).
-test([F, S | T], [F | R], A) :-
-    F < 0,
-    test([S | T], R, A).
+sign_runs_plus([], L, []) :- sign_runs([], L).
+% handle last item
+sign_runs_plus([L], [], [F | T]) :-
+    same_sign(L, F),
+    sign_runs_plus([], [L, F | T], []).
+sign_runs_plus([L], [], [F | T]) :-
+    not(same_sign(L, F)),
+    sign_runs_plus([], [[L] | [F | T]], []).
+% empty list
+sign_runs_plus([F, S | T], [], []) :-
+    same_sign(F, S),
+    sign_runs_plus([S | T], [], [F]).
+sign_runs_plus([F, S | T], [], []) :-
+    not(same_sign(F, S)),
+    sign_runs_plus([S | T], [F], []).
+% some items
+sign_runs_plus([F, S | T], C, R) :-
+    same_sign(F, S),
+    sign_runs_plus([S | T], C, [F | R]).
+sign_runs_plus([F, S | T], C, R) :-
+    not(same_sign(F, S)),
+    sign_runs_plus([S | T], [[F | R] | C], []).
 
 % --- Q5 ---
 
