@@ -66,52 +66,30 @@ same_sign(X, Y) :- X < 0, Y < 0.
 
 % Empty list
 sign_runs([], []).
-sign_runs([], F).
 % use sign_runs to solve this question
-sign_runs(L, R) :- sign_runs(L, R, []).
-
-% flip the list
-sign_runs(F, L, []) :-
-    flip(L, R), reverse(R, F).
-
-% handle last item, empty result
-sign_runs([L], [], [F | T]) :-
-    same_sign(L, F),
-    sign_runs([], [L, F | T], []).
-sign_runs([L], [], [F | T]) :-
-    not(same_sign(L, F)),
-    sign_runs([], [[L] | [F | T]], []).
-% handle last item, some items
-sign_runs([L], C, [F | T]) :-
-    same_sign(L, F),
-    sign_runs([], [[L, F | T] | C], []).
-sign_runs([L], C, [F | T]) :-
-    not(same_sign(L, F)),
-    sign_runs([], [[L], [F | T] | C], []).
-% empty result list
-sign_runs([F, S | T], [], []) :-
+sign_runs([F, S | T], []) :-
+    sign_runs([S | T], [[F]]).
+sign_runs([F, S | T], R) :-
     same_sign(F, S),
-    sign_runs([S | T], [], [F]).
-sign_runs([F, S | T], [], []) :-
+    append_last(R, F, R).
+sign_runs([F, S | T], R) :-
     not(same_sign(F, S)),
-    sign_runs([S | T], [F], []).
-% empty temp list
-sign_runs([F, S | T], C, []) :-
-    same_sign(F, S),
-    sign_runs([S | T], C, [F]).
-sign_runs([F, S | T], C, []) :-
-    not(same_sign(F, S)),
-    sign_runs([S | T], [[F] | C], []).
-% some items
-sign_runs([F, S | T], C, R) :-
-    same_sign(F, S),
-    sign_runs([S | T], C, [F | R]).
-sign_runs([F, S | T], C, R) :-
-    not(same_sign(F, S)),
-    sign_runs([S | T], [[F | R] | C], []).
+    append_last(R, F, R).
 
 % --- Q5 ---
 
-% Binary Tree
-empty().
-tree(L, Num, R).
+% no leaves
+is_heap(tree(empty, _, empty)).
+% check both sides
+is_heap(tree(tree(L1, N1, R1), N, tree(L2, N2, R2))) :-
+    N1 >= N, N2 >= N,
+    is_heap(L1), is_heap(R1), 
+    is_heap(L2), is_heap(R2).
+% left side
+is_heap(tree(tree(L, N, R), M, _)) :-
+    N >= M,
+    is_heap(L), is_heap(R).
+% right side
+is_heap(tree(_, M, tree(L, N, R))) :-
+    N >= M,
+    is_heap(L), is_heap(R).
