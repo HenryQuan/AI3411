@@ -69,16 +69,17 @@ sign_runs([], []).
 % one item
 sign_runs([X], [[X]]).
 % Positive
-sign_runs([F | [S | T]], []) :-
+sign_runs([F | [S | T]], [[F | R]]) :-
     F >= 0, S >= 0,
-    sign_runs()
-sign_runs([F | [S | T]], []) :-
+    sign_runs([S | T], [R]).
+sign_runs([F | [S | T]], [[F | R]]) :-
     F < 0, S < 0,
+    sign_runs([S | T], [R]).
 % Negative
 sign_runs([F | [S | T]], []) :-
-    F >= 0, S < 0,
+    F >= 0, S < 0.
 sign_runs([F | [S | T]], []) :-
-    F < 0, S >= 0,
+    F < 0, S >= 0.
 
 % --- Q5 ---
 
