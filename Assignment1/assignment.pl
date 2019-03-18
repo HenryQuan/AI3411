@@ -55,33 +55,34 @@ sqrt_list([H | T], [[H, S] | R]) :-
 % --- Q4 ---
 
 % append new item to list
-append_new([], N, [N]).
-append_new([H | T], N, [H | R]) :-
-    append_new(T, N, R).
-
-% append new item to the last item in the list
-append_last([L], N, [R]) :- append_new(L, N, R).
-append_last([H | T], N, [H | R]) :-
-    append_last(T, N, R).
+my_append([], N, [[N]]).
+my_append([H | T], N, [H | R]) :-
+    my_append(T, N, R).
 
 % Empty list
 sign_runs([], []).
 % one item
 sign_runs([X], [[X]]).
-% Same sign
-sign_runs([F | [S | T]], [[F | R]]) :-
+% Positive
+
+ss([H1,H2|T],Res):-
+H1 > 0,
+H2 > 0,
+ss([H2|T],[[H1 | R]]).
+
+sign_runs([F, S | T], [[F | R]]) :-
     F >= 0, S >= 0,
     sign_runs([S | T], [R]).
-sign_runs([F | [S | T]], [[F | R]]) :-
+sign_runs([F, S | T], [[F | R]]) :-
     F < 0, S < 0,
     sign_runs([S | T], [R]).
-% Different sign
-sign_runs([F | [S | T]], R) :-
+% Negative
+sign_runs([F, S | T], [[F] | [[S] | [R]]]) :-
     F >= 0, S < 0,
-    sign_runs([S | T], [[F | R]]).
-sign_runs([F | [S | T]], R) :-
+    sign_runs(T, [R]).
+sign_runs([F, S | T], [[F] | [[S] | [R]]]) :-
     F < 0, S >= 0,
-    sign_runs([S | T], [[F | R]]).
+    sign_runs(T, [R]).
 
 % --- Q5 ---
 
