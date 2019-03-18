@@ -46,18 +46,11 @@ same_name(C, P) :-
 
 % Empty list
 sqrt_list([], []).
-% one item
-sqrt_list([X], [[X]]).
-% Positive
-sqrt_list([F | [S | T]], []) :-
-    F >= 0, S >= 0,
-sqrt_list([F | [S | T]], []) :-
-    F < 0, S < 0,
-% Negative
-sqrt_list([F | [S | T]], []) :-
-    F >= 0, S < 0,
-sqrt_list([F | [S | T]], []) :-
-    F < 0, S >= 0,
+% One or more elements
+sqrt_list([H | T], [[H, S] | R]) :-
+    % negative sqrt is not valid
+    H >= 0, S is sqrt(H),
+    sqrt_list(T, R).
 
 % --- Q4 ---
 
@@ -71,55 +64,21 @@ append_last([L], N, [R]) :- append_new(L, N, R).
 append_last([H | T], N, [H | R]) :-
     append_last(T, N, R).
 
-% check if same sign (all positive or all negative)
-same_sign(X, Y) :- X >= 0, Y >= 0.
-same_sign(X, Y) :- X < 0, Y < 0.
-
 % Empty list
 sign_runs([], []).
-sign_runs([], F).
-% use sign_runs to solve this question
-sign_runs(L, R) :- sign_runs(L, R, []).
-
-% flip the list
-sign_runs(F, L, []) :-
-    flip(L, R), reverse(R, F).
-
-% handle last item, empty result
-sign_runs([L], [], [F | T]) :-
-    same_sign(L, F),
-    sign_runs([], [L, F | T], []).
-sign_runs([L], [], [F | T]) :-
-    not(same_sign(L, F)),
-    sign_runs([], [[L] | [F | T]], []).
-% handle last item, some items
-sign_runs([L], C, [F | T]) :-
-    same_sign(L, F),
-    sign_runs([], [[L, F | T] | C], []).
-sign_runs([L], C, [F | T]) :-
-    not(same_sign(L, F)),
-    sign_runs([], [[L], [F | T] | C], []).
-% empty result list
-sign_runs([F, S | T], [], []) :-
-    same_sign(F, S),
-    sign_runs([S | T], [], [F]).
-sign_runs([F, S | T], [], []) :-
-    not(same_sign(F, S)),
-    sign_runs([S | T], [F], []).
-% empty temp list
-sign_runs([F, S | T], C, []) :-
-    same_sign(F, S),
-    sign_runs([S | T], C, [F]).
-sign_runs([F, S | T], C, []) :-
-    not(same_sign(F, S)),
-    sign_runs([S | T], [[F] | C], []).
-% some items
-sign_runs([F, S | T], C, R) :-
-    same_sign(F, S),
-    sign_runs([S | T], C, [F | R]).
-sign_runs([F, S | T], C, R) :-
-    not(same_sign(F, S)),
-    sign_runs([S | T], [[F | R] | C], []).
+% one item
+sign_runs([X], [[X]]).
+% Positive
+sign_runs([F | [S | T]], []) :-
+    F >= 0, S >= 0,
+    sign_runs()
+sign_runs([F | [S | T]], []) :-
+    F < 0, S < 0,
+% Negative
+sign_runs([F | [S | T]], []) :-
+    F >= 0, S < 0,
+sign_runs([F | [S | T]], []) :-
+    F < 0, S >= 0,
 
 % --- Q5 ---
 
