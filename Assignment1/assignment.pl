@@ -46,11 +46,18 @@ same_name(C, P) :-
 
 % Empty list
 sqrt_list([], []).
-% One or more elements
-sqrt_list([H | T], [[H, S] | R]) :-
-    % negative sqrt is not valid
-    H >= 0, S is sqrt(H),
-    sqrt_list(T, R).
+% one item
+sqrt_list([X], [[X]]).
+% Positive
+sqrt_list([F | [S | T]], []) :-
+    F >= 0, S >= 0,
+sqrt_list([F | [S | T]], []) :-
+    F < 0, S < 0,
+% Negative
+sqrt_list([F | [S | T]], []) :-
+    F >= 0, S < 0,
+sqrt_list([F | [S | T]], []) :-
+    F < 0, S >= 0,
 
 % --- Q4 ---
 
