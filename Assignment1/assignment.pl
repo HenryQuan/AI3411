@@ -73,12 +73,12 @@ sign_runs([F, S | T], [[F | R]]) :-
     F < 0, S < 0,
     sign_runs([S | T], [R]).
 % Negative
-sign_runs([F, S | T], [[F], R]) :-
+sign_runs([F, S | T], [[F] | R]) :-
     F >= 0, S < 0,
-    sign_runs([S | T], [R]).
-sign_runs([F, S | T], [[F], R]) :-
+    sign_runs([S | T], R).
+sign_runs([F, S | T], [[F] | R]) :-
     F < 0, S >= 0,
-    sign_runs([S | T], [R]).
+    sign_runs([S | T], R).
 
 % --- Q5 ---
 
