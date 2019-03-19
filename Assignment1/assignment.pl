@@ -55,7 +55,7 @@ sqrt_list([H | T], [[H, S] | R]) :-
 % --- Q4 ---
 
 % append new item to list
-my_append([], N, [[N]]).
+my_append([], N, [N]).
 my_append([H | T], N, [H | R]) :-
     my_append(T, N, R).
 
@@ -68,17 +68,14 @@ sign_runs([], []).
 % one item
 sign_runs([X], [[X]]).
 % Positive
-sign_runs([F, S | T], [[F | R]]) :-
+sign_runs([F, S | T], R) :-
     same_sign(F, S),
-    sign_runs([S | T], [R]).
+    sign_runs([S | T], N),
+    my_append(N, [F], R).
 % Negative
 sign_runs([F, S | T], [[F] | R]) :-
     not(same_sign(F, S)),
     sign_runs([S | T], R).
-sign_runs([F, S, T | L], [[F, S] | R]) :-
-    same_sign(F, S),
-    not(same_sign(S, T)),
-    sign_runs([T | L], R).
 
 % --- Q5 ---
 
