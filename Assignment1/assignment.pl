@@ -63,6 +63,10 @@ my_append([H | T], N, [H | R]) :-
 same_sign(X, Y) :- X >= 0, Y >= 0.
 same_sign(X, Y) :- X < 0, Y < 0.
 
+% what does thi mean
+% sign_runs([-2], [])
+% sign_runs([-2, -1], [])
+
 % Empty list
 sign_runs([], []).
 % one item
@@ -70,8 +74,8 @@ sign_runs([X], [[X]]).
 % Positive
 sign_runs([F, S | T], R) :-
     same_sign(F, S),
-    sign_runs([S | T], N),
-    my_append(N, [F], R).
+    my_append([[F]], N, R),
+    sign_runs([S | T], [N]).
 % Negative
 sign_runs([F, S | T], [[F] | R]) :-
     not(same_sign(F, S)),
