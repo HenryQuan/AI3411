@@ -63,13 +63,9 @@ my_append([H | T], N, [H | R]) :-
 sign_runs([], []).
 % one item
 sign_runs([X], [[X]]).
+sign_runs([X, []], [[X]]).
+sign_runs([[], X], [[X]]).
 % Positive
-
-ss([H1,H2|T],Res):-
-H1 > 0,
-H2 > 0,
-ss([H2|T],[[H1 | R]]).
-
 sign_runs([F, S | T], [[F | R]]) :-
     F >= 0, S >= 0,
     sign_runs([S | T], [R]).
@@ -77,12 +73,12 @@ sign_runs([F, S | T], [[F | R]]) :-
     F < 0, S < 0,
     sign_runs([S | T], [R]).
 % Negative
-sign_runs([F, S | T], [[F] | [[S] | [R]]]) :-
+sign_runs([F, S | T], [[F], R]) :-
     F >= 0, S < 0,
-    sign_runs(T, [R]).
-sign_runs([F, S | T], [[F] | [[S] | [R]]]) :-
+    sign_runs([S | T], [R]).
+sign_runs([F, S | T], [[F], R]) :-
     F < 0, S >= 0,
-    sign_runs(T, [R]).
+    sign_runs([S | T], [R]).
 
 % --- Q5 ---
 
