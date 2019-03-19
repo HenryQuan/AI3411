@@ -59,26 +59,26 @@ my_append([], N, [[N]]).
 my_append([H | T], N, [H | R]) :-
     my_append(T, N, R).
 
+% shorten my code
+same_sign(X, Y) :- X >= 0, Y >= 0.
+same_sign(X, Y) :- X < 0, Y < 0.
+
 % Empty list
 sign_runs([], []).
 % one item
 sign_runs([X], [[X]]).
-% some additional rule???
-sign_runs([H | T], [R]) :- sign_runs([H | T], [H | R]).
 % Positive
 sign_runs([F, S | T], [[F | R]]) :-
-    F >= 0, S >= 0,
-    sign_runs([S | T], [R]).
-sign_runs([F, S | T], [[F | R]]) :-
-    F < 0, S < 0,
+    same_sign(F, S),
     sign_runs([S | T], [R]).
 % Negative
 sign_runs([F, S | T], [[F] | R]) :-
-    F >= 0, S < 0,
+    not(same_sign(F, S)),
     sign_runs([S | T], R).
-sign_runs([F, S | T], [[F] | R]) :-
-    F < 0, S >= 0,
-    sign_runs([S | T], R).
+sign_runs([F, S, T | L], [[F, S] | R]) :-
+    same_sign(F, S),
+    not(same_sign(S, T)),
+    sign_runs([T | L], R).
 
 % --- Q5 ---
 
