@@ -71,7 +71,7 @@ sign_runs([F, S | T], Answer) :-
 sign_runs([F, S | T], Answer) :-
     not(same_sign(F, S)),
     sign_runs([S | T], R),
-    Answer = F | [F].
+    Answer = [F, R].
 % [[1, [1], [-1]]] -> [[1, 1], [-1]]
 
 % --- Q5 ---
