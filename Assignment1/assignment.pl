@@ -54,43 +54,24 @@ sqrt_list([H | T], [[H, S] | R]) :-
 
 % --- Q4 ---
 
-% append new item to list
-my_append([], N, [N]).
-my_append(N, [], [N]).
-% list first then number
-my_append([H | T], N, [H | R]) :-
-    my_append(T, N, R).
-% number first then list
-my_append(N, [H | T], [N | R]) :-
-    my_append(H, T, R).
-
 % shorten my code
 same_sign(X, Y) :- X >= 0, Y >= 0.
 same_sign(X, Y) :- X < 0, Y < 0.
-
-% what does thi mean
-% sign_runs([-2], [])
-% sign_runs([-2, -1], [])
 
 % Empty list
 sign_runs([], []).
 % one item
 sign_runs([X], [[X]]).
 % Positive
-sign_runs([F, S | T], [N]) :-
+sign_runs([F, S | T], Answer) :-
     same_sign(F, S),
     sign_runs([S | T], [R]),
-    my_append(F, R, N).
+    Answer = [[F | R]].
 % Negative
-sign_runs([F, S | T], [[F] | R]) :-
+sign_runs([F, S | T], Answer) :-
     not(same_sign(F, S)),
-    sign_runs([S | T], R).
-
-append_list([], []).
-append_list([X], [X]).
-append_list([H | T], N) :-
-    append_list(T, R),
-    my_append(H, R, N).
+    sign_runs([S | T], R),
+    Answer = [[F] | R].
 
 % --- Q5 ---
 
