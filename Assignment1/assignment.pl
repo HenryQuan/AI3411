@@ -56,8 +56,13 @@ sqrt_list([H | T], [[H, S] | R]) :-
 
 % append new item to list
 my_append([], N, [N]).
+my_append(N, [], [N]).
+% list first then number
 my_append([H | T], N, [H | R]) :-
     my_append(T, N, R).
+% number first then list
+my_append(N, [H | T], [N | R]) :-
+    my_append(H, T, R).
 
 % shorten my code
 same_sign(X, Y) :- X >= 0, Y >= 0.
@@ -80,6 +85,12 @@ sign_runs([F, S | T], R) :-
 sign_runs([F, S | T], [[F] | R]) :-
     not(same_sign(F, S)),
     sign_runs([S | T], R).
+
+append_list([], []).
+append_list([X], [X]).
+append_list([H | T], N) :-
+    append_list(T, R),
+    my_append(H, R, N).
 
 % --- Q5 ---
 
