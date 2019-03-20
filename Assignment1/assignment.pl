@@ -63,16 +63,15 @@ sign_runs([], []).
 % one item
 sign_runs([X], [[X]]).
 % Same sign
-sign_runs([F, S | T], [Answer]) :-
+sign_runs([F, S | T], Answer) :-
     same_sign(F, S),
-    sign_runs([S | T], [R]),
-    Answer = [F | R].
+    sign_runs([S | T], [H | R]),
+    Answer = [[F | H] | R].
 % Different sign
 sign_runs([F, S | T], Answer) :-
     not(same_sign(F, S)),
-    sign_runs([S | T], R),
-    Answer = [[F] | R].
-% [[1, [1], [-1]]] -> [[1, 1], [-1]]
+    sign_runs([S | T], [H | R]),
+    Answer = [[F], H | R].
 
 % --- Q5 ---
 
