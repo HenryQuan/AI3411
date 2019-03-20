@@ -54,6 +54,9 @@ sqrt_list([H | T], [[H, S] | R]) :-
 
 % --- Q4 ---
 
+% This question took me about two weeks to solve,
+% What's hard about it is that 
+
 % shorten my code
 same_sign(X, Y) :- X >= 0, Y >= 0.
 same_sign(X, Y) :- X < 0, Y < 0.
@@ -63,15 +66,13 @@ sign_runs([], []).
 % one item
 sign_runs([X], [[X]]).
 % Same sign
-sign_runs([F, S | T], Answer) :-
+sign_runs([F, S | T], [[F | H] | R]) :-
     same_sign(F, S),
-    sign_runs([S | T], [H | R]),
-    Answer = [[F | H] | R].
+    sign_runs([S | T], [H | R]).
 % Different sign
-sign_runs([F, S | T], Answer) :-
+sign_runs([F, S | T], [[F], H | R]) :-
     not(same_sign(F, S)),
-    sign_runs([S | T], [H | R]),
-    Answer = [[F], H | R].
+    sign_runs([S | T], [H | R]).
 
 % --- Q5 ---
 
