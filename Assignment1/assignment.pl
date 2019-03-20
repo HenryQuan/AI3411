@@ -53,28 +53,32 @@ sqrt_list([H | T], [[H, S] | R]) :-
     sqrt_list(T, R).
 
 % --- Q4 ---
-% flip the whole list
-flip([], []).
-flip([F | T], [R | L]) :-
-    reverse(F, R),
-    flip(T, L).
 
-% check if same sign (all positive or all negative)
-same_sign(X, X).
+% 20/03/2019 11:04pm solved!
+
+% This question took me around two weeks to solve it.
+
+% Why is it so hard?
+% Base cases are not really hard, comparison is not that hard (e.g. [1, -1, 1]. You need to compare 1, -1 and then -1, 1).
+% The hard part is how to append and close the bracket.
+% 
+
+% shorten my code
 same_sign(X, Y) :- X >= 0, Y >= 0.
 same_sign(X, Y) :- X < 0, Y < 0.
 
 % Empty list
 sign_runs([], []).
-% use sign_runs to solve this question
-sign_runs([F, S | T], []) :-
-    sign_runs([S | T], [[F]]).
-sign_runs([F, S | T], R) :-
+% one item
+sign_runs([X], [[X]]).
+% Same sign
+sign_runs([F, S | T], [[F | H] | R]) :-
     same_sign(F, S),
-    append_last(R, F, R).
-sign_runs([F, S | T], R) :-
+    sign_runs([S | T], [H | R]). % I simply forgot that you can do this -> [H | R]
+% Different sign
+sign_runs([F, S | T], [[F], H | R]) :-
     not(same_sign(F, S)),
-    append_last(R, F, R).
+    sign_runs([S | T], [H | R]).
 
 % --- Q5 ---
 
