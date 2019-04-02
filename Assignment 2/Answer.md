@@ -7,4 +7,10 @@
 |start35|Mem|Time|Mem|215612|
 |start43|Mem|Time|Mem|2884650|
 
-b)
+b) 
+#### UCS
+#### IDS
+This is a memory efficient UCS.
+#### A*
+#### IDA*
+This is a memory efficient A*.
