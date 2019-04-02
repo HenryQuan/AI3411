@@ -1,8 +1,8 @@
 # Q1
 ||UCS|IDS|A*|IDA*|
 |---|---|---|---|---|
-|start10|||||
-|start20|||||
-|start27|||||
+|start10|2565||||
+|start20|Mem||||
+|start27|Mem||||
 |start35|||||
 |start43|||||
