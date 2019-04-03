@@ -30,8 +30,10 @@ H = 43.
 
 b) 551168
 
-c) 
+c) It cannot find the solution so it goes deeper.
 
 # Q3
+
 # Q4
+
 # Q5
