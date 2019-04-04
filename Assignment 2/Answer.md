@@ -41,12 +41,16 @@ It cannot find the solution so it goes deeper.
 # Q4
 **a)**
 
-Manhattan distance, h(x, y, xG, yG) = (xG - x) + (yG - y).
+Manhattan distance, h(x, y, xG, yG) = (x - xG) + (y - yG).
 
 **b)**
 
 i) Yes, it is still admissible since it simply measures the stright line distance. Moving diagonally does not affect it much and it might even become a better heuristic because of it.
 
-ii) No, it is not admissible anymore becuase of diagonal move. Manhattan distance does not work diagonally because it is designed for horizontal and vertical moves.
+ii) No, it is not admissible anymore becuase of diagonal moves. Manhattan distance does not work diagonally because it is designed for horizontal and vertical moves.
 
+iii) Now, it can do horizontal, vertical and diagonal moves. It might be good to consider all types of moves instead of the straight line distance (diagonal moves). By combining i and ii,
+
+h(x, y, xG, yG) = (x - xG) / 2 + (y - yG) / 2 + sqrt(((x − xG) / 2)
+^2 + ((y − yG) / 2)^2)
 # Q5
