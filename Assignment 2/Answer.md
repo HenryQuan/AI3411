@@ -58,3 +58,4 @@ i) Yes, it is still admissible since it simply measures the stright line distanc
 ii) No, it is not admissible anymore becuase of diagonal move. Manhattan distance does not work diagonally because it is designed for horizontal and vertical moves.
 
 # Q5
+
