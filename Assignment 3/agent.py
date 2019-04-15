@@ -13,3 +13,6 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 '''
 
 print('Hello World')
+
+init, start(), second_move(), third_move(),
+last_move(), win(), loss(), draw(), end()
