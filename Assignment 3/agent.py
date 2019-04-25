@@ -42,7 +42,6 @@ def moves():
 
 # get the optimal depth to search
 def adapative_depth(moves):
-    # From 5 to 20
     depth = min_depth
     depth = depth + moves / 81 * (max_depth - min_depth)
     return int(depth)
@@ -53,14 +52,17 @@ def minimax_ab(root):
 
 # build a tree from current game with a depth limit
 def build_tree(depth):
+    for i in (1, depth):
+
+
     return
 
 # do some magic and get the best move
 def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves())
-    build_tree(depth)
-    return 1
+    with build_tree(depth) as root:
+        return minimax_ab(root)
 
 # get a random move
 def dummy_move():
