@@ -24,9 +24,9 @@ import sys
 game_boards = [[0] * 10 for i in range(10)]
 curr_board = 0
 
-# set the max/min depth we can reach
-min_depth = 5
-max_depth = 20
+# set the max/min depth we can reach (free feel to adjust these two values)
+min_depth = 3
+max_depth = 30
 # this is only for fun
 player_name = 'Yiheng\'s OP Bot'
 
@@ -34,8 +34,8 @@ player_name = 'Yiheng\'s OP Bot'
 def scan_board():
     player = 0
     opponent = 0
-    for (i in range(1..9)):
-        for (j in range(1..9)):
+    for i in range(1, 9):
+        for j in range(1, 9):
             if game_boards[i][j] == 1:
                 player += 1
             elif game_boards[i][j] == 2:
@@ -52,9 +52,12 @@ def adapative_depth():
 
 # try to get optimal solution
 def minimax():
+    return
 
 # do some magic and get the best move
 def optimal_move():
+    # scan current board
+    scan_board()
 
 # print a row (modified from Zac senpai's code)
 def print_row(board, a, b, c, i, j, k):
