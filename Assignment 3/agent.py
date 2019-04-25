@@ -14,7 +14,7 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 import socket
 import random, math
 import sys
-import tree
+import tree as Tree
 
 '''
 9x9 board
@@ -32,33 +32,35 @@ max_depth = 30
 player_name = 'Yiheng\'s OP Bot'
 
 # scan game_board and how many 1s and 2s
-def scan_board():
-    player = 0
-    opponent = 0
+def moves():
+    total = 0
     for i in range(1, 9):
         for j in range(1, 9):
-            if game_boards[i][j] == 1:
-                player += 1
-            elif game_boards[i][j] == 2:
-                opponent += 1
-    return (player, opponent)
+            if game_boards[i][j] == 1 or game_boards[i][j] == 2:
+                total += 1
+    return total
 
 # get the optimal depth to search
-def adapative_depth():
+def adapative_depth(moves):
     # From 5 to 20
     depth = min_depth
-    total = sum(scan_board())
-    depth = depth + total / 81 * (max_depth - min_depth)
+    depth = depth + moves / 81 * (max_depth - min_depth)
     return int(depth)
 
 # get optimal solution with minimax and alpha beta pruning
-def minimax_ab():
+def minimax_ab(root):
+    return
+
+# build a tree from current game with a depth limit
+def build_tree(depth):
     return
 
 # do some magic and get the best move
 def optimal_move():
-    # scan current board
-    return
+    # build a tree with a good depth
+    depth = adapative_depth(moves())
+    build_tree(depth)
+    return 1
 
 # get a random move
 def dummy_move():
