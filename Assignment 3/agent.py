@@ -11,13 +11,8 @@ My current solution to use minimax and alpha-beta pruning. Gradually increas eth
 The heuristic function will be measuring 'most wins' and the cost is always one for all moves.
 '''
 
-'''
-init, start(), second_move(), third_move(),
-last_move(), win(), loss(), draw(), end()
-'''
-
 import socket
-import random
+import random, math
 import sys
 
 '''
@@ -28,7 +23,38 @@ import sys
 '''
 game_boards = [[0] * 10 for i in range(10)]
 curr_board = 0
+
+# set the max/min depth we can reach
+min_depth = 5
+max_depth = 20
+# this is only for fun
 player_name = 'Yiheng\'s OP Bot'
+
+# scan game_board and how many 1s and 2s
+def scan_board():
+    player = 0
+    opponent = 0
+    for (i in range(1..9)):
+        for (j in range(1..9)):
+            if game_boards[i][j] == 1:
+                player += 1
+            elif game_boards[i][j] == 2:
+                opponent += 1
+    return (player, opponent)
+
+# get the optimal depth to search
+def adapative_depth():
+    # From 5 to 20
+    depth = min_depth
+    total = sum(scan_board())
+    depth = depth + total / 81 * (max_depth - min_depth)
+    return int(depth)
+
+# try to get optimal solution
+def minimax():
+
+# do some magic and get the best move
+def optimal_move():
 
 # print a row (modified from Zac senpai's code)
 def print_row(board, a, b, c, i, j, k):
@@ -54,11 +80,8 @@ def print_board(board):
 
 # choose a move to play (modified from Zac senpai's code)
 def play():
-    # play a random move for now
-    n = random.randint(1,9)
-    while game_boards[curr_board][n] != 0:
-        n = random.randint(1,9)
-
+    # get the best move
+    n = optimal_move()
     place(curr_board, n, 1)
     return n
 
