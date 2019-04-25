@@ -14,7 +14,7 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 import socket
 import random, math
 import sys
-import tree as Tree
+from tree import * 
 
 '''
 9x9 board
@@ -22,7 +22,9 @@ import tree as Tree
 1 - Player
 2 - Opponent
 '''
+# easy index (don't need to worry about -1)
 game_boards = [[0] * 10 for i in range(10)]
+moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
@@ -30,15 +32,6 @@ min_depth = 3
 max_depth = 30
 # this is only for fun
 player_name = 'Yiheng\'s OP Bot'
-
-# scan game_board and how many 1s and 2s
-def moves():
-    total = 0
-    for i in range(1, 9):
-        for j in range(1, 9):
-            if game_boards[i][j] == 1 or game_boards[i][j] == 2:
-                total += 1
-    return total
 
 # get the optimal depth to search
 def adapative_depth(moves):
@@ -48,20 +41,33 @@ def adapative_depth(moves):
 
 # get optimal solution with minimax and alpha beta pruning
 def minimax_ab(root):
-    return
+    return 1
 
 # build a tree from current game with a depth limit
-def build_tree(depth):
-    for i in (1, depth):
+def build_tree(root, curr_depth, max_depth):
+    # termination
+    if (curr_depth > max_depth):
+        return
 
+    # loop through all possible situation
+    for i in range(1, 9):
+        legal_move = game_boards[curr_board][i]
+        if (legal_move > 0):
+            continue
+        # build tree recursively
+        curr = Node(game_boards[curr_board], i)
+        root.children.add(curr)
+        build_tree(curr, curr_depth + 1, max_depth)
 
-    return
 
 # do some magic and get the best move
 def optimal_move():
     # build a tree with a good depth
-    depth = adapative_depth(moves())
-    with build_tree(depth) as root:
+    depth = adapative_depth(moves)
+    with Tree() as root:
+        # build a new tree and search through it
+        build_tree(root, 0, depth)
+        print(root)
         return minimax_ab(root)
 
 # get a random move
@@ -95,15 +101,18 @@ def print_board(board):
 
 # choose a move to play (modified from Zac senpai's code)
 def play():
+    # randome move
+    #n = dummy_move()
     # get the best move
-    n = dummy_move()
+    n = optimal_move()
     place(curr_board, n, 1)
     return n
 
 # place a move in the global boards (modified from Zac senpai's code)
 def place(board, num, player):
-    global curr_board
+    global curr_board, moves
     curr_board = num
+    moves += 1
     game_boards[board][num] = player
 
 # Parse command from server (modified from Zac senpai's code)

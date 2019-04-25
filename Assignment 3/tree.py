@@ -1,24 +1,12 @@
 class Tree:
-    def __init__(self):
-        self.children = []
-
-    def optimal
+    children = []
 
 class Node:
+    children = []
     # board is not saved but only for calculating heuristic
     def __init__(self, board, num):
         self.number = num
         self.heuristic = self._get_heuristic(board, num)
-        # no child by default
-        self.children = []
-
-    # for getting the number
-    def get_number():
-        return self.number
-
-    # add a subtree
-    def add_children(self, tree):
-        self.children.append(tree)
 
     # get heuristic of this move
     def _get_heuristic(self, board, num):
