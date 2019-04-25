@@ -42,6 +42,7 @@ def adapative_depth(moves):
 
 # get optimal solution with minimax and alpha beta pruning
 def minimax_ab(root):
+    # insert algorithm and we are done
     return 0
 
 # build a tree from current game with a depth limit
@@ -68,7 +69,6 @@ def optimal_move():
     root = Tree()
     # build a new tree and search through it
     build_tree(root, 0, depth)
-    debug_print('done')
     return minimax_ab(root)
 
 # get a random move
