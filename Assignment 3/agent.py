@@ -28,7 +28,7 @@ import sys
 '''
 game_boards = [[0] * 10 for i in range(10)]
 curr_board = 0
-player_name = 'Yiheng\'s AI Bot'
+player_name = 'Yiheng\'s OP Bot'
 
 # print a row (modified from Zac senpai's code)
 def print_row(board, a, b, c, i, j, k):
@@ -54,13 +54,11 @@ def print_board(board):
 
 # choose a move to play (modified from Zac senpai's code)
 def play():
-    # just play a random move for now
+    # play a random move for now
     n = random.randint(1,9)
-    print("{0} {1}".format(curr_board, n))
     while game_boards[curr_board][n] != 0:
         n = random.randint(1,9)
 
-    # print("playing", n)
     place(curr_board, n, 1)
     return n
 
@@ -95,10 +93,9 @@ def parse(string):
         place(curr_board, int(args[0]), 2)
         return play()
     elif command == 'win':
-        print('{} wins :)'.format(player_name))
+        print('{} wins :)\n'.format(player_name))
         return -1
     elif command == 'loss':
-        print('{} Lost :('.format(player_name))
         return -1
     return 0
 
@@ -110,21 +107,29 @@ def main():
         sys.exit(1)
 
     port = int(sys.argv[2])
+    address = 'localhost'
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    s.connect(('localhost', port))
-    while True:
-        text = s.recv(1024).decode()
-        if not text:
-            continue
-        for line in text.split('\n'):
-            response = parse(line)
-            # game is over
-            if response < 0:
-                s.close()
-                return
-            elif response > 0:
-                s.sendall((str(response) + '\n').encode())
-
+    # it takes a while for the server to go down and free the port
+    try:
+        s.connect((address, port))
+    
+        while True:
+            text = s.recv(1024).decode()
+            if not text:
+                continue
+            for line in text.split('\n'):
+                response = parse(line)
+                # game is over
+                if response < 0:
+                    return
+                elif response > 0:
+                    s.sendall((str(response) + '\n').encode())
+    except Exception as e:
+        # if you connect to the same port too frequent
+        print("Failed to connect to %s:%d - %s" % (address, port, e))
+    finally:
+        s.close()
+    
 if __name__ == '__main__':
     main()
