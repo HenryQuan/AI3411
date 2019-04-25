@@ -14,6 +14,7 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 import socket
 import random, math
 import sys
+import tree
 
 '''
 9x9 board
@@ -50,14 +51,21 @@ def adapative_depth():
     depth = depth + total / 81 * (max_depth - min_depth)
     return int(depth)
 
-# try to get optimal solution
-def minimax():
+# get optimal solution with minimax and alpha beta pruning
+def minimax_ab():
     return
 
 # do some magic and get the best move
 def optimal_move():
     # scan current board
-    scan_board()
+    return
+
+# get a random move
+def dummy_move():
+    n = random.randint(1, 9)
+    while not game_boards[curr_board][n] == 0:
+        n = random.randint(1, 9)
+    return n
 
 # print a row (modified from Zac senpai's code)
 def print_row(board, a, b, c, i, j, k):
@@ -84,7 +92,7 @@ def print_board(board):
 # choose a move to play (modified from Zac senpai's code)
 def play():
     # get the best move
-    n = optimal_move()
+    n = dummy_move()
     place(curr_board, n, 1)
     return n
 

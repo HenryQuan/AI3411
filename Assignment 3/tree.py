@@ -7,3 +7,4 @@ class Tree:
     # get heuristic of this move
     def _get_heuristic(board, num, self):
         # check for win first
+        return 0
