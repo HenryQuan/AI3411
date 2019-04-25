@@ -10,5 +10,6 @@ if [ "$#" -ne 2 ]; then
 fi
 
 ./servt -p $2 & sleep 0.1
-./sample.py -p $2 & sleep 0.1
-./$1    -p $2
+# fight again yourself and get stronger
+./$1 -p $2 & sleep 0.1
+./$1 -p $2
