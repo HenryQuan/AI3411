@@ -3,12 +3,24 @@ class Tree:
     def __init__(self):
         self.children = []
 
+    # print the entire tree
+    def print_tree(self):
+        if (len(self.children) > 0):
+            for i in self.children:
+                i.print_node()
+
 class Node:
     # board is not saved but only for calculating heuristic
     def __init__(self, board, num):
         self.number = num
         self.heuristic = self._get_heuristic(board, num)
         self.children = []
+
+    # This node and its children
+    def print_node(self):
+        print('Board: {} Heuristic: {}'.format(self.number, self.heuristic))
+        for i in self.children:
+            i.print_node()
 
     # get heuristic of this move
     def _get_heuristic(self, board, num):

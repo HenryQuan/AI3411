@@ -42,7 +42,7 @@ def adapative_depth(moves):
 
 # get optimal solution with minimax and alpha beta pruning
 def minimax_ab(root):
-    return 1
+    return 0
 
 # build a tree from current game with a depth limit
 def build_tree(root, curr_depth, max_depth):
