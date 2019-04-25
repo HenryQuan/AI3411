@@ -15,6 +15,7 @@ import socket
 import random, math
 import sys
 from tree import * 
+from debug import *
 
 '''
 9x9 board
@@ -56,7 +57,7 @@ def build_tree(root, curr_depth, max_depth):
             continue
         # build tree recursively
         curr = Node(game_boards[curr_board], i)
-        root.children.add(curr)
+        root.children.append(curr)
         build_tree(curr, curr_depth + 1, max_depth)
 
 
@@ -64,11 +65,11 @@ def build_tree(root, curr_depth, max_depth):
 def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves)
-    with Tree() as root:
-        # build a new tree and search through it
-        build_tree(root, 0, depth)
-        print(root)
-        return minimax_ab(root)
+    root = Tree()
+    # build a new tree and search through it
+    build_tree(root, 0, depth)
+    debug_print('done')
+    return minimax_ab(root)
 
 # get a random move
 def dummy_move():
@@ -158,25 +159,25 @@ def main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # it takes a while for the server to go down and free the port
-    try:
-        s.connect((address, port))
-    
-        while True:
-            text = s.recv(1024).decode()
-            if not text:
-                continue
-            for line in text.split('\n'):
-                response = parse(line)
-                # game is over
-                if response < 0:
-                    return
-                elif response > 0:
-                    s.sendall((str(response) + '\n').encode())
-    except Exception as e:
-        # if you connect to the same port too frequent
-        print("Failed to connect to %s:%d - %s" % (address, port, e))
-    finally:
-        s.close()
+#try:
+    s.connect((address, port))
+
+    while True:
+        text = s.recv(1024).decode()
+        if not text:
+            continue
+        for line in text.split('\n'):
+            response = parse(line)
+            # game is over
+            if response < 0:
+                return
+            elif response > 0:
+                s.sendall((str(response) + '\n').encode())
+#except Exception as e:
+    # if you connect to the same port too frequent
+    print("Failed to connect to %s:%d - %s" % (address, port, e))
+#finally:
+    s.close()
     
 if __name__ == '__main__':
     main()

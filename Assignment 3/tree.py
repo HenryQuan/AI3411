@@ -1,12 +1,14 @@
+
 class Tree:
-    children = []
+    def __init__(self):
+        self.children = []
 
 class Node:
-    children = []
     # board is not saved but only for calculating heuristic
     def __init__(self, board, num):
         self.number = num
         self.heuristic = self._get_heuristic(board, num)
+        self.children = []
 
     # get heuristic of this move
     def _get_heuristic(self, board, num):
@@ -28,27 +30,28 @@ class Node:
         return weight
 
     # if player or opponent wins
-    def _check_win(board, num, self):
-        with board[:] as new_board:
-            # place the new move
-            new_board[num] = 1
-            win = 0
-            # check rows
-            for i in range(1, 3):
-                start = i * 3 - 2
-                if new_board[start] == new_board[start + 1] == new_board[start + 2]:
-                    return new_board[start]
+    def _check_win(self, board, num):
+        win = 0
+        # place the new move
+        new_board = board[:]
+        new_board[num] = 1
 
-            # check columns
-            for i in range(1, 3):
-                if new_board[i] == new_board[i + 3] == new_board[i + 6]:
-                    return new_board[i]
-            
-            # check diagonals
-            if new_board[1] == new_board[5] == new_board[9]:
-                return new_board[1]
-            if new_board[3] == new_board[5] == new_board[7]:
-                return new_board[3]
+        # check rows
+        for i in range(1, 3):
+            start = i * 3 - 2
+            if new_board[start] == new_board[start + 1] == new_board[start + 2]:
+                return new_board[start]
 
-            # no wins
-            return win
+        # check columns
+        for i in range(1, 3):
+            if new_board[i] == new_board[i + 3] == new_board[i + 6]:
+                return new_board[i]
+        
+        # check diagonals
+        if new_board[1] == new_board[5] == new_board[9]:
+            return new_board[1]
+        if new_board[3] == new_board[5] == new_board[7]:
+            return new_board[3]
+
+        # no wins
+        return win
