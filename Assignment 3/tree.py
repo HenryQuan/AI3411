@@ -3,7 +3,7 @@ Tree and Node class for generating the entire game map
 '''
 
 from debug import *
-import random
+import random, math
 
 class Tree:
     def __init__(self):
@@ -11,62 +11,49 @@ class Tree:
         self.children = []
         self.heuristic = 0
         self.number = 0
+        self.parent = None
 
     '''
     mode is either True or False (Max or Min)
     '''
     # minimax with alpha-beta pruning
     def minimax_ab(self, root, alphabeta, mode=True):
-        debug_print(str(alphabeta))
+        # debug_print('H{}B{}'.format(root.heuristic, root.number))
         if len(root.children) == 0:
-            return root.heuristic
+            return root
 
         # try something else
         if mode:
-            best_move = 0
-            best = -9999
+            best_move = None
+            best = -math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, False)
-                debug_print(choice)
-                if choice > best:
-                    best = choice
-                    best_move = node.number
-                elif choice == best:
-                    luck = random.randint(1, 10)
-                    if luck < 8:
-                        best = choice
-                        best_move = node.number
+                if choice.heuristic > best:
+                    best = choice.heuristic
+                    best_move = node
                 
                 alphabeta[0] = max(alphabeta[0], best)
                 if alphabeta[1] <= alphabeta[0]:
-                    debug_print('cut')
                     break
             return best_move            
         else:
-            best_move = 0
-            worst = 9999
+            best_move = None
+            worst = math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, True)
-                debug_print(choice)
-                if choice < worst:
-                    worst = choice
-                    best_move = node.number
-                elif choice == worst:
-                    luck = random.randint(1, 10)
-                    if luck < 8:
-                        best = choice
-                        best_move = node.number
+                if choice.heuristic < worst:
+                    worst = choice.heuristic
+                    best_move = node
 
                 alphabeta[1] = min(alphabeta[1], worst)
                 if alphabeta[1] <= alphabeta[0]:
-                    debug_print('cut')
-                    break
+                    break              
             return best_move
 
     # print the entire tree
     def print_tree(self):
         debug_print('------')
-        if (len(self.children) > 0):
+        if len(self.children) > 0:
             for i in self.children:
                 i.print_node()
         debug_print('------')
@@ -84,7 +71,7 @@ class Node:
 
     # This node and its children
     def print_node(self):
-        debug_print('B: {} H: {}'.format(self.number, self.heuristic))
+        debug_print('H{}N{}'.format(self.heuristic, self.number))
         for i in self.children:
             i.print_node()
 
@@ -94,11 +81,11 @@ class Node:
         win = self._check_win(board, num)
         weight = 0
         if win == 1:
-            weight = 99
+            return 99
         elif win == 2:
-            weight = -99
+            return -99
+        # most-win heuristic
         else:
-            # most-win heuristic
             if num == 5:
                 weight = 4
             if num in [1, 3, 7, 9]:
@@ -106,7 +93,7 @@ class Node:
             elif num in [2, 4, 6, 8]:
                 weight = 2 
 
-        # calculate overall heuristic        
+        # calculate overall heuristic
         if self.player:
             weight = self.parent.heuristic + weight
         else: 
@@ -119,19 +106,19 @@ class Node:
         win = 0
         # place the new move
         new_board = board.copy()
-        if (self.player):
+        if self.player:
             new_board[num] = 1
         else:
             new_board[num] = 2
 
         # check rows
-        for i in range(1, 3):
+        for i in range(1, 4):
             start = i * 3 - 2
             if new_board[start] == new_board[start + 1] == new_board[start + 2]:
                 return new_board[start]
 
         # check columns
-        for i in range(1, 3):
+        for i in range(1, 4):
             if new_board[i] == new_board[i + 3] == new_board[i + 6]:
                 return new_board[i]
         

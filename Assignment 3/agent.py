@@ -13,7 +13,7 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 
 import socket
 import random, math
-import sys, gc
+import sys
 from tree import * 
 from debug import *
 
@@ -29,7 +29,11 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
+<<<<<<< HEAD
 min_depth = 3
+=======
+min_depth = 2
+>>>>>>> 0ca2c29827df108ade31168e2491edbdffa7f6be
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -53,22 +57,25 @@ max_depth -> number
 # build a tree from current game with a depth limit
 def build_tree(root, board, player, curr_depth, max_depth):
     # termination
-    if (curr_depth > max_depth):
+    if (curr_depth >= max_depth):
         return
 
     # loop through all possible situation
-    for num in range(1, 9):
+    new_depth = curr_depth + 1
+    for num in range(1, 10):
         # must be zero (illegal move otherwise)
         illegal_move = game_boards[board][num] > 0
-        if (illegal_move):
+        if illegal_move:
             # debug_print('{}-{} is illegal'.format(board, num))
             continue
 
         # build tree recursively
         curr = Node(root, game_boards[board], num, player)
-        build_tree(curr, num, not player, curr_depth + 1, max_depth)
-        root.children.append(curr)
+        if curr.heuristic == -99:
+            continue
         
+        build_tree(curr, num, not player, new_depth, max_depth)
+        root.children.append(curr)
 
 # do some magic and get the best move
 def optimal_move():
@@ -77,13 +84,14 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, True, 1, depth)
-    # root.print_tree()
+    build_tree(root, curr_board, True, 0, 2)
+    root.print_tree()
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
-    debug_print('Best -> {}-{}'.format(curr_board, best))
-    gc.collect()
-    return best
+    while not best.parent.parent == None:
+        best = best.parent
+    debug_print('Best -> B{}N{}'.format(curr_board, best.number))
+    return best.number
 
 # get a random move
 def dummy_move():
@@ -122,7 +130,6 @@ def play():
     # get the best move
     n = optimal_move()
     place(curr_board, n, 1)
-
     return n
 
 # place a move in the global boards (modified from Zac senpai's code)
@@ -165,7 +172,7 @@ def parse(string):
 
 # Setup socket and keep receiving commands (modified from Zac senpai's code)
 def main():
-    if (len(sys.argv) < 3 or (len(sys.argv) > 2 and not sys.argv[1] == '-p')):
+    if len(sys.argv) < 3 or (len(sys.argv) > 2 and not sys.argv[1] == '-p'):
         # some basic validations
         print('Usage: ./agent.py -p (port)')
         sys.exit(1)
