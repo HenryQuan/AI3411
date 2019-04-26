@@ -81,10 +81,8 @@ class Node:
         win = self._check_win(board, num)
         # win -> 1, lose -> 2, no wins or draw -> 0
         if win == 1:
-            debug_print('win')
             return 1
         elif win == 2:
-            debug_print('lost')
             return -1
         else:
             return 0

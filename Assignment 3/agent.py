@@ -26,6 +26,7 @@ from debug import *
 # easy index (don't need to worry about -1)
 game_boards = [[0] * 10 for i in range(10)]
 moves = 1
+tree_size = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
@@ -49,27 +50,31 @@ curr_depth -> number
 max_depth -> number
 '''
 # build a tree from current game with a depth limit
-def build_tree(root, board, player, curr_depth, max_depth):
+def build_tree(root, game, board, player, curr_depth, max_depth):
     # termination
     if (curr_depth >= max_depth):
         return
 
     # loop through all possible situation
-    new_depth = curr_depth + 1
     for num in range(1, 10):
         # must be zero (illegal move otherwise)
-        illegal_move = game_boards[board][num] > 0
+        illegal_move = game[board][num] > 0
         if illegal_move:
-            # debug_print('{}-{} is illegal'.format(board, num))
             continue
+        else:
+            if player:
+                game[board][num] = 1
+            else:
+                game[board][num] = 2
 
         # build tree recursively
-        curr = Node(root, game_boards[board], num, player)
-        if curr.heuristic == -99:
-            continue
-        
-        build_tree(curr, num, not player, new_depth, max_depth)
+        curr = Node(root, game[board], num, player)        
         root.children.append(curr)
+        global tree_size
+        tree_size += 1
+    
+    for node in root.children:
+        build_tree(node, game, node.number, not player, curr_depth + 1, max_depth)
 
 # do some magic and get the best move
 def optimal_move():
@@ -78,8 +83,11 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, True, 0, 2)
+    build_tree(root, game_boards.copy(), curr_board, True, 1, depth)
     # root.print_tree()
+    global tree_size 
+    print('Tree - {}'.format(tree_size))
+    tree_size = 1
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
     debug_print('Best -> B{}N{}'.format(curr_board, best))
