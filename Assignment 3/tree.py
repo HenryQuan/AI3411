@@ -20,30 +20,30 @@ class Tree:
     def minimax_ab(self, root, alphabeta, mode=True):
         # debug_print('H{}B{}'.format(root.heuristic, root.number))
         if len(root.children) == 0:
-            return root
+            return root.heuristic
 
         # try something else
         if mode:
-            best_move = None
+            best_move = 0
             best = -math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, False)
-                if choice.heuristic > best:
-                    best = choice.heuristic
-                    best_move = node
+                if choice > best:
+                    best = choice
+                    best_move = node.number
                 
                 alphabeta[0] = max(alphabeta[0], best)
                 if alphabeta[1] <= alphabeta[0]:
                     break
             return best_move            
         else:
-            best_move = None
+            best_move = 0
             worst = math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, True)
-                if choice.heuristic < worst:
-                    worst = choice.heuristic
-                    best_move = node
+                if choice < worst:
+                    worst = choice
+                    best_move = node.number
 
                 alphabeta[1] = min(alphabeta[1], worst)
                 if alphabeta[1] <= alphabeta[0]:
@@ -79,27 +79,15 @@ class Node:
     def _get_heuristic(self, board, num):
         # check if player wins
         win = self._check_win(board, num)
-        weight = 0
+        # win -> 1, lose -> 2, no wins or draw -> 0
         if win == 1:
-            return 99
+            debug_print('win')
+            return 1
         elif win == 2:
-            return -99
-        # most-win heuristic
+            debug_print('lost')
+            return -1
         else:
-            if num == 5:
-                weight = 4
-            if num in [1, 3, 7, 9]:
-                weight = 3
-            elif num in [2, 4, 6, 8]:
-                weight = 2 
-
-        # calculate overall heuristic
-        if self.player:
-            weight = self.parent.heuristic + weight
-        else: 
-            weight = self.parent.heuristic - weight
-
-        return weight
+            return 0
 
     # if player or opponent wins
     def _check_win(self, board, num):
