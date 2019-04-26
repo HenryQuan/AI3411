@@ -9,7 +9,7 @@ class Tree:
         # give default values
         self.children = []
         self.heuristic = 0
-        self.number = 0
+        self.number = -9999
 
     '''
     mode is either True or False (Max or Min)
@@ -18,25 +18,30 @@ class Tree:
     def minimax_ab(self, root, mode=True):
         # debug_print('H:{} N:{}'.format(root.heuristic, root.number))
         if len(root.children) == 0:
-            return (root.heuristic, root.number)
+            return root
 
         if mode:
-            best = (-9999, 0)
+            best = -9999
+            node = None
             for node in root.children:
                 choice = self.minimax_ab(node, False)
                 # debug_print(choice)
-                if choice[0] > best[0]:
-                    best = tuple(choice)
-            return best
+                val = choice.heuristic
+                if (choice.heuristic > best):
+                    best = val
+                    node = val
+            return node
         else:
-            worst = (9999, 0)
+            worst = 9999
+            node = None
             for node in root.children:
                 choice = self.minimax_ab(node, True)
                 # debug_print(choice)
-                if choice[0] < worst[0]:
-                    worst = tuple(choice)
-            return worst
-            
+                val = choice.heuristic
+                if (choice.heuristic < worst):
+                    worst = val
+                    node = val
+            return node
 
     # print the entire tree
     def print_tree(self):

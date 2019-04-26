@@ -59,6 +59,7 @@ def build_tree(root, board, player, curr_depth, max_depth):
         # must be zero (illegal move otherwise)
         illegal_move = game_boards[board][i] > 0
         if (illegal_move):
+            print('{}-{} is illegal'.format(board, i))
             continue
 
         # build tree recursively
@@ -74,9 +75,13 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, True, 1, depth)
+    build_tree(root, curr_board, True, 1, 2)
     # root.print_tree()
-    return root.minimax_ab(root)[1]
+
+    node = root.minimax_ab(root)
+    debug_print('Best -> {}-{}'.format(curr_board, node.number))
+    print(node)
+    return node.number
 
 # get a random move
 def dummy_move():
@@ -114,7 +119,6 @@ def play():
 
     # get the best move
     n = optimal_move()
-    debug_print('Best -> {}'.format(n))
     place(curr_board, n, 1)
 
     return n
