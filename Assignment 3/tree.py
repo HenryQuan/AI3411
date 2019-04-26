@@ -4,6 +4,7 @@ Tree and Node class for generating the entire game map
 
 from debug import *
 import random
+import gc
 
 class Tree:
     def __init__(self):
@@ -16,8 +17,8 @@ class Tree:
     mode is either True or False (Max or Min)
     '''
     # minimax with alpha-beta pruning
-    def minimax_ab(self, root, mode=True):
-        # debug_print('H:{} N:{}'.format(root.heuristic, root.number))
+    def minimax_ab(self, root, alphabeta, mode=True):
+        debug_print(str(alphabeta))
         if len(root.children) == 0:
             return root.heuristic
 
@@ -26,8 +27,8 @@ class Tree:
             best_move = 0
             best = -9999
             for node in root.children:
-                choice = self.minimax_ab(node, False)
-                # debug_print(choice)
+                choice = self.minimax_ab(node, alphabeta, False)
+                debug_print(choice)
                 if choice > best:
                     best = choice
                     best_move = node.number
@@ -36,13 +37,18 @@ class Tree:
                     if luck < 8:
                         best = choice
                         best_move = node.number
+                
+                alphabeta[0] = max(alphabeta[0], best)
+                if alphabeta[1] <= alphabeta[0]:
+                    debug_print('cut')
+                    break
             return best_move            
         else:
             best_move = 0
             worst = 9999
             for node in root.children:
-                choice = self.minimax_ab(node, True)
-                # debug_print(choice)
+                choice = self.minimax_ab(node, alphabeta, True)
+                debug_print(choice)
                 if choice < worst:
                     worst = choice
                     best_move = node.number
@@ -51,6 +57,11 @@ class Tree:
                     if luck < 8:
                         best = choice
                         best_move = node.number
+
+                alphabeta[1] = min(alphabeta[1], worst)
+                if alphabeta[1] <= alphabeta[0]:
+                    debug_print('cut')
+                    break
             return best_move
 
     # print the entire tree
@@ -71,6 +82,7 @@ class Node:
 
         self.heuristic = self._get_heuristic(board, num)
         self.children = []
+        gc.collect()
 
     # This node and its children
     def print_node(self):
@@ -108,7 +120,7 @@ class Node:
     def _check_win(self, board, num):
         win = 0
         # place the new move
-        new_board = board[:]
+        new_board = board.copy()
         if (self.player):
             new_board[num] = 1
         else:
