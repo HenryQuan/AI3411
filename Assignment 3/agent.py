@@ -29,15 +29,16 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
-max_depth = 30
+min_depth = 2
+max_depth = 20
 # this is only for fun
 player_name = 'Yiheng\'s OP Bot'
 
 # get the optimal depth to search
 def adapative_depth(moves):
     depth = min_depth
-    depth = depth + moves / 81 * (max_depth - min_depth)
+    debug_print('Moves: {}'.format(moves))
+    depth = depth + math.floor(moves / 81 * (max_depth - min_depth))
     return int(depth)
 
 # get optimal solution with minimax and alpha beta pruning
@@ -46,29 +47,32 @@ def minimax_ab(root):
     return 0
 
 # build a tree from current game with a depth limit
-def build_tree(root, board, curr_depth, max_depth):
+def build_tree(root, board, player, curr_depth, max_depth):
     # termination
     if (curr_depth > max_depth):
         return
 
     # loop through all possible situation
     for i in range(1, 9):
-        legal_move = game_boards[board][i]
-        if (legal_move > 0):
+        # must be zero
+        illegal_move = game_boards[board][i] > 0
+        if (illegal_move):
             continue
 
         # build tree recursively
-        curr = Node(game_boards[board], i)
+        curr = Node(root, game_boards[board], i, player)
         root.children.append(curr)
-        build_tree(curr, i, curr_depth + 1, max_depth)
+        # keep swapping players
+        build_tree(curr, i, not player, curr_depth + 1, max_depth)
 
 # do some magic and get the best move
 def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves)
+    debug_print('Depth: {}'.format(depth))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, 0, depth)
+    build_tree(root, curr_board, True, 1, depth)
     root.print_tree()
     return minimax_ab(root)
 
