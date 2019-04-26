@@ -29,7 +29,7 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 5
+min_depth = 3
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -39,6 +39,8 @@ def adapative_depth(moves):
     depth = min_depth
     debug_print('\nMoves: {}'.format(moves))
     depth = depth + math.floor(moves / 81 * (max_depth - min_depth))
+    if depth % 2 == 0:
+        depth -= 1
     return int(depth)
 
 '''
