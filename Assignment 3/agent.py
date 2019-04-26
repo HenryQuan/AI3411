@@ -30,7 +30,7 @@ curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
 min_depth = 2
-max_depth = 20
+max_depth = 30
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -78,10 +78,9 @@ def optimal_move():
     build_tree(root, curr_board, True, 1, 2)
     # root.print_tree()
 
-    node = root.minimax_ab(root)
-    debug_print('Best -> {}-{}'.format(curr_board, node.number))
-    print(node)
-    return node.number
+    best = root.minimax_ab(root)
+    debug_print('Best -> {}-{}'.format(curr_board, best))
+    return best
 
 # get a random move
 def dummy_move():

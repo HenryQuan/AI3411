@@ -18,30 +18,26 @@ class Tree:
     def minimax_ab(self, root, mode=True):
         # debug_print('H:{} N:{}'.format(root.heuristic, root.number))
         if len(root.children) == 0:
-            return root
+            return root.heuristic
 
+        best_move = 0
         if mode:
             best = -9999
-            node = None
             for node in root.children:
                 choice = self.minimax_ab(node, False)
                 # debug_print(choice)
-                val = choice.heuristic
-                if (choice.heuristic > best):
-                    best = val
-                    node = val
-            return node
+                if (choice > best):
+                    best = choice
+                    best_move = node.number
         else:
             worst = 9999
-            node = None
             for node in root.children:
                 choice = self.minimax_ab(node, True)
                 # debug_print(choice)
-                val = choice.heuristic
-                if (choice.heuristic < worst):
-                    worst = val
-                    node = val
-            return node
+                if (choice < worst):
+                    worst = choice
+                    best_move = node.number
+        return best_move
 
     # print the entire tree
     def print_tree(self):
@@ -91,7 +87,7 @@ class Node:
             elif num in [2, 4, 6, 8]:
                 weight = 2 
 
-        # calculate overall heristic        
+        # calculate overall heuristic        
         if self.player == 1:
             weight += self.parent.heuristic
         else: 
