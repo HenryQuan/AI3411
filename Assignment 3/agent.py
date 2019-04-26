@@ -41,6 +41,13 @@ def adapative_depth(moves):
     depth = depth + math.floor(moves / 81 * (max_depth - min_depth))
     return int(depth)
 
+'''
+root -> Tree or Node
+board -> current board
+player -> player(1) or opponent(2)
+curr_depth -> number
+max_depth -> number
+'''
 # build a tree from current game with a depth limit
 def build_tree(root, board, player, curr_depth, max_depth):
     # termination
@@ -68,8 +75,8 @@ def optimal_move():
     root = Tree()
     # build a new tree and search through it
     build_tree(root, curr_board, True, 1, depth)
-    root.print_tree()
-    return root.minimax_ab()
+    # root.print_tree()
+    return root.minimax_ab(root)[1]
 
 # get a random move
 def dummy_move():
@@ -102,11 +109,14 @@ def print_board(board):
 
 # choose a move to play (modified from Zac senpai's code)
 def play():
-    # randome move
-    #n = dummy_move()
+    # random move
+    # n = dummy_move()
+
     # get the best move
     n = optimal_move()
+    debug_print('Best -> {}'.format(n))
     place(curr_board, n, 1)
+
     return n
 
 # place a move in the global boards (modified from Zac senpai's code)

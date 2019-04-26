@@ -8,4 +8,4 @@ Q4 was really challenging and I got 10.1/12 for this assignment.
 Nah, I am not really good with this kind of assignment.
 
 ### Assignment 3 - Nine-Board Tic-Tac-Toe 
-Using alpha-beta pruning + IDA* to write a program that can play better than you do (hopefully).
+Using minimax with alpha-beta pruning to write a program that can play better than you do (hopefully).

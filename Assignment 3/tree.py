@@ -9,10 +9,34 @@ class Tree:
         # give default values
         self.children = []
         self.heuristic = 0
+        self.number = 0
 
+    '''
+    mode is either True or False (Max or Min)
+    '''
     # minimax with alpha-beta pruning
-    def minimax_ab(self):
-        return 1
+    def minimax_ab(self, root, mode=True):
+        # debug_print('H:{} N:{}'.format(root.heuristic, root.number))
+        if len(root.children) == 0:
+            return (root.heuristic, root.number)
+
+        if mode:
+            best = (-9999, 0)
+            for node in root.children:
+                choice = self.minimax_ab(node, False)
+                # debug_print(choice)
+                if choice[0] > best[0]:
+                    best = tuple(choice)
+            return best
+        else:
+            worst = (9999, 0)
+            for node in root.children:
+                choice = self.minimax_ab(node, True)
+                # debug_print(choice)
+                if choice[0] < worst[0]:
+                    worst = tuple(choice)
+            return worst
+            
 
     # print the entire tree
     def print_tree(self):
