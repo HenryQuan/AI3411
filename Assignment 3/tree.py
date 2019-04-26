@@ -4,6 +4,7 @@ Tree and Node class for generating the entire game map
 
 from debug import *
 import random
+import gc
 
 class Tree:
     def __init__(self):
@@ -81,6 +82,7 @@ class Node:
 
         self.heuristic = self._get_heuristic(board, num)
         self.children = []
+        gc.collect()
 
     # This node and its children
     def print_node(self):
@@ -118,7 +120,7 @@ class Node:
     def _check_win(self, board, num):
         win = 0
         # place the new move
-        new_board = board[:]
+        new_board = board.copy()
         if (self.player):
             new_board[num] = 1
         else:

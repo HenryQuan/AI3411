@@ -29,7 +29,7 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 10
+min_depth = 5
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -76,7 +76,7 @@ def optimal_move():
     root = Tree()
     # build a new tree and search through it
     build_tree(root, curr_board, True, 1, depth)
-    # root.print_tree()
+    root.print_tree()
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
     debug_print('Best -> {}-{}'.format(curr_board, best))
