@@ -10,11 +10,17 @@ class Tree:
         self.children = []
         self.heuristic = 0
 
+    # minimax with alpha-beta pruning
+    def minimax_ab(self):
+        return 1
+
     # print the entire tree
     def print_tree(self):
+        debug_print('------')
         if (len(self.children) > 0):
             for i in self.children:
                 i.print_node()
+        debug_print('------')
 
 class Node:
     # board is not saved but only for calculating heuristic
