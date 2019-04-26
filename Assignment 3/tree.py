@@ -85,10 +85,8 @@ class Node:
         weight = 0
         if win == 1:
             weight = 99
-            debug_print('Win')
         elif win == 2:
             weight = -99
-            debug_print('Lost')
         else:
             # most-win heuristic
             if num == 5:

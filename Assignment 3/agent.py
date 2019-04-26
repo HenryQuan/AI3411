@@ -29,8 +29,8 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 10
-max_depth = 100
+min_depth = 5
+max_depth = 10
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -55,18 +55,20 @@ def build_tree(root, board, player, curr_depth, max_depth):
         return
 
     # loop through all possible situation
-    for i in range(1, 9):
+    for num in range(1, 9):
         # must be zero (illegal move otherwise)
-        illegal_move = game_boards[board][i] > 0
+        illegal_move = game_boards[board][num] > 0
         if (illegal_move):
             # print('{}-{} is illegal'.format(board, i))
             continue
 
         # build tree recursively
-        curr = Node(root, game_boards[board], i, player)
+        curr = Node(root, game_boards[board], num, player)
         root.children.append(curr)
+    
+    for node in root.children:
         # keep swapping players
-        build_tree(curr, i, not player, curr_depth + 1, max_depth)
+        build_tree(node, node.number, not player, curr_depth + 1, max_depth)
 
 # do some magic and get the best move
 def optimal_move():
@@ -75,7 +77,7 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, True, 1, 2)
+    build_tree(root, curr_board, True, 1, depth)
     # root.print_tree()
 
     best = root.minimax_ab(root)
