@@ -58,7 +58,7 @@ def build_tree(root, board, player, curr_depth, max_depth):
     for num in range(1, 10):
         # must be zero (illegal move otherwise)
         illegal_move = game_boards[board][num] > 0
-        if (illegal_move):
+        if illegal_move:
             # debug_print('{}-{} is illegal'.format(board, num))
             continue
 
@@ -73,9 +73,10 @@ def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves)
     debug_print('Depth: {}'.format(depth))
+    debug_print('Board: {}'.format(curr_board))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, True, 1, 2)
+    build_tree(root, curr_board, True, 1, 1)
     root.print_tree()
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
@@ -163,7 +164,7 @@ def parse(string):
 
 # Setup socket and keep receiving commands (modified from Zac senpai's code)
 def main():
-    if (len(sys.argv) < 3 or (len(sys.argv) > 2 and not sys.argv[1] == '-p')):
+    if len(sys.argv) < 3 or (len(sys.argv) > 2 and not sys.argv[1] == '-p'):
         # some basic validations
         print('Usage: ./agent.py -p (port)')
         sys.exit(1)

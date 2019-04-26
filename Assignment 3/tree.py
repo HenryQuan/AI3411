@@ -61,7 +61,7 @@ class Tree:
     # print the entire tree
     def print_tree(self):
         debug_print('------')
-        if (len(self.children) > 0):
+        if len(self.children) > 0:
             for i in self.children:
                 i.print_node()
         debug_print('------')
@@ -116,7 +116,7 @@ class Node:
         win = 0
         # place the new move
         new_board = board.copy()
-        if (self.player):
+        if self.player:
             new_board[num] = 1
         else:
             new_board[num] = 2
