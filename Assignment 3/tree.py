@@ -3,6 +3,7 @@ Tree and Node class for generating the entire game map
 '''
 
 from debug import *
+import random
 
 class Tree:
     def __init__(self):
@@ -20,24 +21,27 @@ class Tree:
         if len(root.children) == 0:
             return root.heuristic
 
-        best_move = 0
+        # try something else
         if mode:
+            best_move = []
             best = -9999
             for node in root.children:
                 choice = self.minimax_ab(node, False)
                 # debug_print(choice)
-                if (choice > best):
+                if (choice >= best):
                     best = choice
-                    best_move = node.number
+                    best_move.append(node.number)
+            return best_move            
         else:
+            best_move = []
             worst = 9999
             for node in root.children:
                 choice = self.minimax_ab(node, True)
                 # debug_print(choice)
-                if (choice < worst):
+                if (choice <= worst):
                     worst = choice
-                    best_move = node.number
-        return best_move
+                    best_move.append(node.number)
+            return best_move
 
     # print the entire tree
     def print_tree(self):
@@ -88,10 +92,10 @@ class Node:
                 weight = 2 
 
         # calculate overall heuristic        
-        if self.player == 1:
-            weight += self.parent.heuristic
-        else: 
-            weight -= self.parent.heuristic
+    # if self.player == 1:
+        weight += self.parent.heuristic
+    # else: 
+        # weight -= self.parent.heuristic
 
         return weight
 
