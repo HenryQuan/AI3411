@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+'''
+A simple wrapper around play.sh to prevent connection issue
+'''
+
 import random
 import os
 

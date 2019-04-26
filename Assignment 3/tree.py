@@ -1,3 +1,6 @@
+'''
+Tree and Node class for generating the entire game map
+'''
 
 from debug import *
 
