@@ -33,7 +33,7 @@ class Tree:
                     best_move = node.number
                 elif choice == best:
                     luck = random.randint(1, 10)
-                    if luck < 6:
+                    if luck < 8:
                         best = choice
                         best_move = node.number
             return best_move            
@@ -48,7 +48,7 @@ class Tree:
                     best_move = node.number
                 elif choice == worst:
                     luck = random.randint(1, 10)
-                    if luck < 6:
+                    if luck < 8:
                         best = choice
                         best_move = node.number
             return best_move
