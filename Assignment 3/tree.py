@@ -23,24 +23,34 @@ class Tree:
 
         # try something else
         if mode:
-            best_move = []
+            best_move = 0
             best = -9999
             for node in root.children:
                 choice = self.minimax_ab(node, False)
                 # debug_print(choice)
-                if (choice >= best):
+                if choice > best:
                     best = choice
-                    best_move.append(node.number)
+                    best_move = node.number
+                elif choice == best:
+                    luck = random.randint(1, 10)
+                    if luck < 6:
+                        best = choice
+                        best_move = node.number
             return best_move            
         else:
-            best_move = []
+            best_move = 0
             worst = 9999
             for node in root.children:
                 choice = self.minimax_ab(node, True)
                 # debug_print(choice)
-                if (choice <= worst):
+                if choice < worst:
                     worst = choice
-                    best_move.append(node.number)
+                    best_move = node.number
+                elif choice == worst:
+                    luck = random.randint(1, 10)
+                    if luck < 6:
+                        best = choice
+                        best_move = node.number
             return best_move
 
     # print the entire tree
@@ -57,12 +67,7 @@ class Node:
         self.number = num
         self.parent = parent
 
-        if player:
-            # player
-            self.player = 1
-        else:
-            # opponent
-            self.player = 2
+        self.player = player
 
         self.heuristic = self._get_heuristic(board, num)
         self.children = []
@@ -80,8 +85,10 @@ class Node:
         weight = 0
         if win == 1:
             weight = 99
+            debug_print('Win')
         elif win == 2:
             weight = -99
+            debug_print('Lost')
         else:
             # most-win heuristic
             if num == 5:
@@ -92,10 +99,10 @@ class Node:
                 weight = 2 
 
         # calculate overall heuristic        
-    # if self.player == 1:
-        weight += self.parent.heuristic
-    # else: 
-        # weight -= self.parent.heuristic
+        if self.player:
+            weight = self.parent.heuristic + weight
+        else: 
+            weight = self.parent.heuristic - weight
 
         return weight
 
@@ -104,7 +111,10 @@ class Node:
         win = 0
         # place the new move
         new_board = board[:]
-        new_board[num] = 1
+        if (self.player):
+            new_board[num] = 1
+        else:
+            new_board[num] = 2
 
         # check rows
         for i in range(1, 3):
