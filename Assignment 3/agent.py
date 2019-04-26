@@ -82,7 +82,6 @@ def optimal_move():
     # root.print_tree()
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
-    # best = root.minimax(root)
     while not best.parent.parent == None:
         best = best.parent
     debug_print('Best -> B{}N{}'.format(curr_board, best.number))

@@ -50,33 +50,6 @@ class Tree:
                     break              
             return best_move
 
-    def minimax(self, root, mode=True):
-        # debug_print('H{}B{}'.format(root.heuristic, root.number))
-        if len(root.children) == 0:
-            return root
-
-        # try something else
-        if mode:
-            best_move = None
-            best = -math.inf
-            for node in root.children:
-                choice = self.minimax(node, False)
-                if choice.heuristic >= best:
-                    best = choice.heuristic
-                    best_move = node
-            # debug_print('H{}B{}'.format(best, best_move))
-            return best_move            
-        else:
-            best_move = None
-            worst = math.inf
-            for node in root.children:
-                choice = self.minimax(node, True)
-                if choice.heuristic <= worst:
-                    worst = choice.heuristic
-                    best_move = node    
-            # debug_print('H{}B{}'.format(worst, best_move))                  
-            return best_move
-
     # print the entire tree
     def print_tree(self):
         debug_print('------')
