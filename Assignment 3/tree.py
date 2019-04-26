@@ -17,7 +17,6 @@ class Tree:
     '''
     # minimax with alpha-beta pruning
     def minimax_ab(self, root, alphabeta, mode=True):
-        debug_print(str(alphabeta))
         if len(root.children) == 0:
             return root.heuristic
 
@@ -27,7 +26,6 @@ class Tree:
             best = -9999
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, False)
-                debug_print(choice)
                 if choice > best:
                     best = choice
                     best_move = node.number
@@ -39,7 +37,6 @@ class Tree:
                 
                 alphabeta[0] = max(alphabeta[0], best)
                 if alphabeta[1] <= alphabeta[0]:
-                    debug_print('cut')
                     break
             return best_move            
         else:
@@ -47,7 +44,6 @@ class Tree:
             worst = 9999
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, True)
-                debug_print(choice)
                 if choice < worst:
                     worst = choice
                     best_move = node.number
@@ -59,7 +55,6 @@ class Tree:
 
                 alphabeta[1] = min(alphabeta[1], worst)
                 if alphabeta[1] <= alphabeta[0]:
-                    debug_print('cut')
                     break
             return best_move
 
@@ -95,8 +90,10 @@ class Node:
         weight = 0
         if win == 1:
             weight = 99
+            debug_print('win')
         elif win == 2:
             weight = -99
+            debug_print('lost')
         else:
             # most-win heuristic
             if num == 5:
@@ -125,13 +122,13 @@ class Node:
             new_board[num] = 2
 
         # check rows
-        for i in range(1, 3):
+        for i in range(1, 4):
             start = i * 3 - 2
             if new_board[start] == new_board[start + 1] == new_board[start + 2]:
                 return new_board[start]
 
         # check columns
-        for i in range(1, 3):
+        for i in range(1, 4):
             if new_board[i] == new_board[i + 3] == new_board[i + 6]:
                 return new_board[i]
         

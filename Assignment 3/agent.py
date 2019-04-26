@@ -55,7 +55,7 @@ def build_tree(root, board, player, curr_depth, max_depth):
         return
 
     # loop through all possible situation
-    for num in range(1, 9):
+    for num in range(1, 10):
         # must be zero (illegal move otherwise)
         illegal_move = game_boards[board][num] > 0
         if (illegal_move):
@@ -75,8 +75,8 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, True, 1, depth)
-    # root.print_tree()
+    build_tree(root, curr_board, True, 1, 2)
+    root.print_tree()
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
     debug_print('Best -> {}-{}'.format(curr_board, best))
