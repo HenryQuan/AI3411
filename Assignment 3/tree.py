@@ -6,8 +6,10 @@ class Tree:
     # print the entire tree
     def print_tree(self):
         if (len(self.children) > 0):
+            nodes = 0
             for i in self.children:
-                i.print_node()
+                nodes += 1
+                i.print_node(nodes)
 
 class Node:
     # board is not saved but only for calculating heuristic
@@ -17,10 +19,11 @@ class Node:
         self.children = []
 
     # This node and its children
-    def print_node(self):
-        print('Board: {} Heuristic: {}'.format(self.number, self.heuristic))
+    def print_node(self, nodes):
+        print('{}. Board: {} Heuristic: {}'.format(nodes, self.number, self.heuristic))
         for i in self.children:
-            i.print_node()
+            nodes += 1
+            i.print_node(nodes)
 
     # get heuristic of this move
     def _get_heuristic(self, board, num):

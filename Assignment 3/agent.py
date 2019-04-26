@@ -56,7 +56,7 @@ def build_tree(root, board, curr_depth, max_depth):
         legal_move = game_boards[board][i]
         if (legal_move > 0):
             continue
-            
+
         # build tree recursively
         curr = Node(game_boards[board], i)
         root.children.append(curr)
@@ -69,6 +69,7 @@ def optimal_move():
     root = Tree()
     # build a new tree and search through it
     build_tree(root, curr_board, 0, depth)
+    root.print_tree()
     return minimax_ab(root)
 
 # get a random move
