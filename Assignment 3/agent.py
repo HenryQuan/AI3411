@@ -59,7 +59,7 @@ def build_tree(root, board, player, curr_depth, max_depth):
         # must be zero (illegal move otherwise)
         illegal_move = game_boards[board][i] > 0
         if (illegal_move):
-            print('{}-{} is illegal'.format(board, i))
+            # print('{}-{} is illegal'.format(board, i))
             continue
 
         # build tree recursively

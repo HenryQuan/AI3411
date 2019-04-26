@@ -9,7 +9,7 @@ class Tree:
         # give default values
         self.children = []
         self.heuristic = 0
-        self.number = -9999
+        self.number = 0
 
     '''
     mode is either True or False (Max or Min)
