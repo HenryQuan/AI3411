@@ -29,7 +29,7 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 10
+min_depth = 2
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -51,7 +51,7 @@ max_depth -> number
 # build a tree from current game with a depth limit
 def build_tree(root, board, player, curr_depth, max_depth):
     # termination
-    if (curr_depth > max_depth):
+    if (curr_depth >= max_depth):
         return
 
     # loop through all possible situation
@@ -78,8 +78,8 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, True, 1, depth)
-    # root.print_tree()
+    build_tree(root, curr_board, True, 0, 2)
+    root.print_tree()
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
     while not best.parent.parent == None:
