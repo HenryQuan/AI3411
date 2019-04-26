@@ -13,7 +13,7 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 
 import socket
 import random, math
-import sys
+import sys, gc
 from tree import * 
 from debug import *
 
@@ -76,10 +76,11 @@ def optimal_move():
     root = Tree()
     # build a new tree and search through it
     build_tree(root, curr_board, True, 1, depth)
-    root.print_tree()
+    # root.print_tree()
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
     debug_print('Best -> {}-{}'.format(curr_board, best))
+    gc.collect()
     return best
 
 # get a random move
