@@ -29,11 +29,7 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-<<<<<<< HEAD
 min_depth = 3
-=======
-min_depth = 2
->>>>>>> 0ca2c29827df108ade31168e2491edbdffa7f6be
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
