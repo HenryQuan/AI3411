@@ -164,25 +164,25 @@ def main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # it takes a while for the server to go down and free the port
-#try:
-    s.connect((address, port))
+    try:
+        s.connect((address, port))
 
-    while True:
-        text = s.recv(1024).decode()
-        if not text:
-            continue
-        for line in text.split('\n'):
-            response = parse(line)
-            # game is over
-            if response < 0:
-                return
-            elif response > 0:
-                s.sendall((str(response) + '\n').encode())
-#except Exception as e:
-    # if you connect to the same port too frequent
-    print("Failed to connect to %s:%d - %s" % (address, port, e))
-#finally:
-    s.close()
+        while True:
+            text = s.recv(1024).decode()
+            if not text:
+                continue
+            for line in text.split('\n'):
+                response = parse(line)
+                # game is over
+                if response < 0:
+                    return
+                elif response > 0:
+                    s.sendall((str(response) + '\n').encode())
+    except socket.error as e:
+        # if you connect to the same port too frequent
+        print('cannot connect : %s'.format(e))
+    finally:
+        s.close()
     
 if __name__ == '__main__':
     main()
