@@ -29,7 +29,7 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
+min_depth = 10
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -65,9 +65,11 @@ def build_tree(root, board, player, curr_depth, max_depth):
 
         # build tree recursively
         curr = Node(root, game_boards[board], num, player)
-        root.children.append(curr)
-        build_tree(curr, num, not player, new_depth, max_depth)
+        if curr.heuristic == -99:
+            continue
         
+        build_tree(curr, num, not player, new_depth, max_depth)
+        root.children.append(curr)
 
 # do some magic and get the best move
 def optimal_move():
@@ -79,10 +81,12 @@ def optimal_move():
     build_tree(root, curr_board, True, 1, depth)
     # root.print_tree()
 
-    # best = root.minimax_ab(root, [-math.inf, math.inf])
-    best = root.minimax(root)
-    debug_print('Best -> B{}N{}'.format(curr_board, best))
-    return best
+    best = root.minimax_ab(root, [-math.inf, math.inf])
+    # best = root.minimax(root)
+    while not best.parent.parent == None:
+        best = best.parent
+    debug_print('Best -> B{}N{}'.format(curr_board, best.number))
+    return best.number
 
 # get a random move
 def dummy_move():
