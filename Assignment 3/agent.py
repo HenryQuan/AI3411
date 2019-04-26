@@ -13,7 +13,7 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 
 import socket
 import random, math
-import sys, gc
+import sys
 from tree import * 
 from debug import *
 
@@ -29,7 +29,7 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 5
+min_depth = 3
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -55,6 +55,7 @@ def build_tree(root, board, player, curr_depth, max_depth):
         return
 
     # loop through all possible situation
+    new_depth = curr_depth + 1
     for num in range(1, 10):
         # must be zero (illegal move otherwise)
         illegal_move = game_boards[board][num] > 0
@@ -64,7 +65,7 @@ def build_tree(root, board, player, curr_depth, max_depth):
 
         # build tree recursively
         curr = Node(root, game_boards[board], num, player)
-        build_tree(curr, num, not player, curr_depth + 1, max_depth)
+        build_tree(curr, num, not player, new_depth, max_depth)
         root.children.append(curr)
         
 
@@ -73,15 +74,13 @@ def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves)
     debug_print('Depth: {}'.format(depth))
-    debug_print('Board: {}'.format(curr_board))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, curr_board, True, 1, 1)
-    root.print_tree()
+    build_tree(root, curr_board, True, 1, depth)
+    # root.print_tree()
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
-    debug_print('Best -> {}-{}'.format(curr_board, best))
-    gc.collect()
+    debug_print('Best -> B{}N{}'.format(curr_board, best))
     return best
 
 # get a random move
@@ -121,7 +120,6 @@ def play():
     # get the best move
     n = optimal_move()
     place(curr_board, n, 1)
-
     return n
 
 # place a move in the global boards (modified from Zac senpai's code)

@@ -3,7 +3,7 @@ Tree and Node class for generating the entire game map
 '''
 
 from debug import *
-import random
+import random, math
 
 class Tree:
     def __init__(self):
@@ -17,23 +17,19 @@ class Tree:
     '''
     # minimax with alpha-beta pruning
     def minimax_ab(self, root, alphabeta, mode=True):
+        debug_print('H{}B{}'.format(root.heuristic, root.number))
         if len(root.children) == 0:
             return root.heuristic
 
         # try something else
         if mode:
             best_move = 0
-            best = -9999
+            best = -math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, False)
-                if choice > best:
+                if choice >= best:
                     best = choice
                     best_move = node.number
-                elif choice == best:
-                    luck = random.randint(1, 10)
-                    if luck < 8:
-                        best = choice
-                        best_move = node.number
                 
                 alphabeta[0] = max(alphabeta[0], best)
                 if alphabeta[1] <= alphabeta[0]:
@@ -41,21 +37,16 @@ class Tree:
             return best_move            
         else:
             best_move = 0
-            worst = 9999
+            worst = math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, True)
-                if choice < worst:
+                if choice <= worst:
                     worst = choice
                     best_move = node.number
-                elif choice == worst:
-                    luck = random.randint(1, 10)
-                    if luck < 8:
-                        best = choice
-                        best_move = node.number
 
                 alphabeta[1] = min(alphabeta[1], worst)
                 if alphabeta[1] <= alphabeta[0]:
-                    break
+                    break              
             return best_move
 
     # print the entire tree
@@ -79,7 +70,7 @@ class Node:
 
     # This node and its children
     def print_node(self):
-        debug_print('B: {} H: {}'.format(self.number, self.heuristic))
+        # debug_print('{}-{}'.format(self.number, self.heuristic))
         for i in self.children:
             i.print_node()
 
@@ -88,28 +79,30 @@ class Node:
         # check if player wins
         win = self._check_win(board, num)
         weight = 0
-        if win == 1:
-            weight = 99
-            debug_print('win')
-        elif win == 2:
-            weight = -99
-            debug_print('lost')
-        else:
-            # most-win heuristic
-            if num == 5:
-                weight = 4
-            if num in [1, 3, 7, 9]:
-                weight = 3
-            elif num in [2, 4, 6, 8]:
-                weight = 2 
+        # most-win heuristic
+        if num == 5:
+            weight = 4
+        if num in [1, 3, 7, 9]:
+            weight = 3
+        elif num in [2, 4, 6, 8]:
+            weight = 2 
 
-        # calculate overall heuristic        
+        # calculate overall heuristic
         if self.player:
             weight = self.parent.heuristic + weight
         else: 
             weight = self.parent.heuristic - weight
 
-        return weight
+        # adjust offset
+        offset = 0
+        if win == 1:
+            offset = 99
+            debug_print('win')
+        elif win == 2:
+            offset = -99
+            # debug_print('lost')
+            
+        return weight + offset
 
     # if player or opponent wins
     def _check_win(self, board, num):
