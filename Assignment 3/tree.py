@@ -49,6 +49,31 @@ class Tree:
                     break              
             return best_move
 
+    def minimax(self, root, mode=True):
+        debug_print('H{}B{}'.format(root.heuristic, root.number))
+        if len(root.children) == 0:
+            return root.heuristic
+
+        # try something else
+        if mode:
+            best_move = 0
+            best = -math.inf
+            for node in root.children:
+                choice = self.minimax_ab(node, False)
+                if choice >= best:
+                    best = choice
+                    best_move = node.number
+            return best_move            
+        else:
+            best_move = 0
+            worst = math.inf
+            for node in root.children:
+                choice = self.minimax_ab(node, True)
+                if choice <= worst:
+                    worst = choice
+                    best_move = node.number          
+            return best_move
+
     # print the entire tree
     def print_tree(self):
         debug_print('------')

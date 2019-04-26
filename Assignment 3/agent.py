@@ -65,8 +65,8 @@ def build_tree(root, board, player, curr_depth, max_depth):
 
         # build tree recursively
         curr = Node(root, game_boards[board], num, player)
-        build_tree(curr, num, not player, new_depth, max_depth)
         root.children.append(curr)
+        build_tree(curr, num, not player, new_depth, max_depth)
         
 
 # do some magic and get the best move
@@ -79,7 +79,8 @@ def optimal_move():
     build_tree(root, curr_board, True, 1, depth)
     # root.print_tree()
 
-    best = root.minimax_ab(root, [-math.inf, math.inf])
+    # best = root.minimax_ab(root, [-math.inf, math.inf])
+    best = root.minimax(root)
     debug_print('Best -> B{}N{}'.format(curr_board, best))
     return best
 
