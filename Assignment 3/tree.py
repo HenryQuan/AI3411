@@ -5,66 +5,16 @@ Tree and Node class for generating the entire game map
 from debug import *
 import random, math
 
-class Tree:
-    def __init__(self):
-        # give default values
-        self.children = []
-        self.heuristic = 0
-        self.number = 0
-        self.parent = None
-
-    '''
-    mode is either True or False (Max or Min)
-    '''
-    # minimax with alpha-beta pruning
-    def minimax_ab(self, root, alphabeta, mode=True):
-        # debug_print('H{}B{}'.format(root.heuristic, root.number))
-        if len(root.children) == 0:
-            return root.get_heuristic()
-
-        # try something else
-        if mode:
-            best_move = 0
-            best = -math.inf
-            for node in root.children:
-                choice = self.minimax_ab(node, alphabeta, False)
-                if choice > best:
-                    best = choice
-                    best_move = node.number
-                
-                alphabeta[0] = max(alphabeta[0], choice)
-                if alphabeta[1] <= alphabeta[0]:
-                    break
-            return best_move            
-        else:
-            best_move = 0
-            worst = math.inf
-            for node in root.children:
-                choice = self.minimax_ab(node, alphabeta, True)
-                if choice < worst:
-                    worst = choice
-                    best_move = node.number
-                alphabeta[1] = min(alphabeta[1], choice)
-                if alphabeta[1] <= alphabeta[0]:
-                    break              
-            return best_move
-
-    # print the entire tree
-    def print_tree(self):
-        debug_print('------')
-        if len(self.children) > 0:
-            for i in self.children:
-                i.print_node()
-        debug_print('------')
-
 class Node:
     # board is not saved but only for calculating heuristic
-    def __init__(self, parent, player, game, board, num):
+    def __init__(self, parent, max_player, game, board, num):
         self.number = num
         self.parent = parent
-        self.player = player
+        self.max_player = max_player
+
         self.game = game
         self.board = board
+
         self.children = []
 
     # This node and its children
