@@ -20,35 +20,34 @@ class Tree:
     def minimax_ab(self, root, alphabeta, mode=True):
         # debug_print('H{}B{}'.format(root.heuristic, root.number))
         if len(root.children) == 0 or not root.heuristic == 0:
-            return root
+            return root.heuristic
 
         # try something else
         if mode:
-            best_node = None
+            best_move = 0
             best = -math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, False)
-                if (choice.heuristic >= best):
-                    best = choice.heuristic
-                    best_node = node
+                if choice > best:
+                    best = choice
+                    best_move = node.number
                 
-                alphabeta[0] = max(alphabeta[0], best)
+                alphabeta[0] = max(alphabeta[0], choice)
                 if alphabeta[1] <= alphabeta[0]:
                     break
-            return best_node            
+            return best_move            
         else:
-            best_node = None
+            best_move = 0
             worst = math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, True)
-                if (choice.heuristic <= worst):
-                    worst = choice.heuristic
-                    best_node = node
-
-                alphabeta[1] = min(alphabeta[1], worst)
+                if choice < worst:
+                    worst = choice
+                    best_move = node.number
+                alphabeta[1] = min(alphabeta[1], choice)
                 if alphabeta[1] <= alphabeta[0]:
                     break              
-            return best_node
+            return best_move
 
     # print the entire tree
     def print_tree(self):
@@ -60,12 +59,10 @@ class Tree:
 
 class Node:
     # board is not saved but only for calculating heuristic
-    def __init__(self, parent, board, num, player):
+    def __init__(self, parent, player, board, num):
         self.number = num
         self.parent = parent
-
         self.player = player
-
         self.heuristic = self._get_heuristic(board, num)
         self.children = []
 
@@ -81,10 +78,10 @@ class Node:
         win = self._check_win(board, num)
         # win -> 1, lose -> 2, no wins or draw -> 0
         if win == 1:
-            debug_print('win')
+            # debug_print('win')
             return 1
         elif win == 2:
-            debug_print('lose')
+            # debug_print('lose')
             return -1
         else:
             return 0
@@ -92,29 +89,23 @@ class Node:
     # if player or opponent wins
     def _check_win(self, board, num):
         win = 0
-        # place the new move
-        new_board = board.copy()
-        if self.player:
-            new_board[num] = 1
-        else:
-            new_board[num] = 2
 
         # check rows
         for i in range(1, 4):
             start = i * 3 - 2
-            if new_board[start] == new_board[start + 1] == new_board[start + 2]:
-                return new_board[start]
+            if board[start] == board[start + 1] == board[start + 2]:
+                return board[start]
 
         # check columns
         for i in range(1, 4):
-            if new_board[i] == new_board[i + 3] == new_board[i + 6]:
-                return new_board[i]
+            if board[i] == board[i + 3] == board[i + 6]:
+                return board[i]
         
         # check diagonals
-        if new_board[1] == new_board[5] == new_board[9]:
-            return new_board[1]
-        if new_board[3] == new_board[5] == new_board[7]:
-            return new_board[3]
+        if board[1] == board[5] == board[9]:
+            return board[1]
+        if board[3] == board[5] == board[7]:
+            return board[3]
 
         # no wins
         return win

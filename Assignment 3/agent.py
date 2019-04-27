@@ -26,11 +26,11 @@ from debug import *
 # easy index (don't need to worry about -1)
 game_boards = [[0] * 10 for i in range(10)]
 moves = 1
-tree_size = 1
 curr_board = 0
+tree_size = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
+min_depth = 4
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -39,9 +39,7 @@ player_name = 'Henry\'s OP Bot'
 def adapative_depth(moves):
     depth = min_depth
     debug_print('\nMoves: {}'.format(moves))
-    depth = depth + math.floor(moves / 81 * (max_depth - min_depth))
-    if depth % 2 == 0:
-        depth -= 1
+    depth += math.floor(moves / 81 * (max_depth - min_depth))
     return int(depth)
 
 '''
@@ -54,30 +52,30 @@ max_depth -> number
 # build a tree from current game with a depth limit
 def build_tree(root, game, board, player, curr_depth, max_depth):
     # termination
-    if (curr_depth >= max_depth):
+    if (curr_depth > max_depth):
         return
 
     # loop through all possible situation
+    new_depth = curr_depth + 1
     for num in range(1, 10):
+
         # must be zero (illegal move otherwise)
         illegal_move = game[board][num] > 0
         if illegal_move:
             continue
+        
+        new_board = copy.deepcopy(game)
+        if player:
+            new_board[board][num] = 1
         else:
-            if player:
-                game[board][num] = 1
-            else:
-                game[board][num] = 2
-
+            new_board[board][num] = 2
+    
         # build tree recursively
-        curr = Node(root, game[board], num, player)        
+        curr = Node(root, player, new_board[board], num)        
         root.children.append(curr)
         global tree_size
         tree_size += 1
-    
-    new_depth = 1 + curr_depth
-    for node in root.children:
-        build_tree(node, game, node.number, not player, new_depth, max_depth)
+        build_tree(curr, new_board, num, not player, new_depth, max_depth)
 
 # do some magic and get the best move
 def optimal_move():
@@ -90,14 +88,12 @@ def optimal_move():
     # root.print_tree()
 
     global tree_size
-    print('Tree - {}'.format(tree_size))
-    tree_size = 1
+    debug_print('Tree - {}'.format(tree_size))
+    tree_size = 0
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
-    while best.parent.parent != None:
-        best = best.parent
-    debug_print('Best -> B{}N{}'.format(curr_board, best.number))
-    return best.number
+    debug_print('Best -> B{}N{}'.format(curr_board, best))
+    return best
 
 # get a random move
 def dummy_move():
