@@ -28,6 +28,7 @@ class Tree:
             best = -math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, False)
+                if choice == 1: debug_print('win')
                 if choice > best:
                     best = choice
                     best_move = node.number
@@ -35,19 +36,20 @@ class Tree:
                 alphabeta[0] = max(alphabeta[0], choice)
                 if alphabeta[1] <= alphabeta[0]:
                     break
-            return best_move            
+            return best            
         else:
             best_move = 0
             worst = math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, True)
+                if choice == -1: debug_print('good')
                 if choice < worst:
                     worst = choice
                     best_move = node.number
                 alphabeta[1] = min(alphabeta[1], choice)
                 if alphabeta[1] <= alphabeta[0]:
                     break              
-            return best_move
+            return worst
 
     # print the entire tree
     def print_tree(self):

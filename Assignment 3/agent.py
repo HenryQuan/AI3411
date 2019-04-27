@@ -87,7 +87,7 @@ def optimal_move():
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
     debug_print('Best -> B{}N{}'.format(curr_board, best))
-    return best
+    return 1
 
 # get a random move
 def dummy_move():
