@@ -43,33 +43,15 @@ def adapative_depth(moves):
     return int(depth)
 
 '''
-root -> Tree or Node
-board -> current board
-player -> player(1) or opponent(2)
-curr_depth -> number
-max_depth -> number
+game, board and number are the state
+depth limits the search
+node is the current node
 '''
 # build a tree from current game with a depth limit
-def build_tree(root, game, board, player, curr_depth, max_depth):
-    # termination
-    if (curr_depth > max_depth):
-        return
-
-    # loop through all possible situation
-    new_depth = curr_depth + 1
-    for num in range(1, 10):
-
-        # must be zero (illegal move otherwise)
-        illegal_move = game[board][num] > 0
-        if illegal_move:
-            continue
-    
-        # build tree recursively
-        curr = Node(root, player, copy.deepcopy(game), board, num)        
-        root.children.append(curr)
-        global tree_size
-        tree_size += 1
-        build_tree(curr, curr.game, num, not player, new_depth, max_depth)
+def build_tree(node, game, board, number, depth):
+    # depth reached 0 or game ends (player or opponent won)
+    if depth == 0:
+        return node
 
 # do some magic and get the best move
 def optimal_move():
