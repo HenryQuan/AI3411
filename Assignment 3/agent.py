@@ -92,20 +92,6 @@ def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves)
     debug_print('Depth: {}'.format(depth))
-<<<<<<< HEAD
-    root = Tree()
-    # build a new tree and search through it
-    build_tree(root, copy.deepcopy(game_boards), curr_board, True, 1, depth)
-    # root.print_tree()
-
-    global tree_size
-    debug_print('Tree - {}'.format(tree_size))
-    tree_size = 0
-
-    best = root.minimax_ab(root, [-math.inf, math.inf])
-    debug_print('Best -> B{}N{}'.format(curr_board, best))
-    return 1
-=======
 
     # find best move
     tree = Node(None, True, copy.deepcopy(game_boards), curr_board, 0)
@@ -114,7 +100,6 @@ def optimal_move():
     best_move = best_node.number
     debug_print('Best -> B{}N{}'.format(curr_board, best_move))
     return best_move
->>>>>>> f947b9dcb26ea241339ff7470aa7f4209eab0228
 
 # get a random move
 def dummy_move():
