@@ -30,7 +30,7 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 5
+min_depth = 3
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -85,8 +85,10 @@ max_player (max or min)
 # build a tree from current game with a depth limit
 def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, depth):
     # depth reached 0 or game ends (player or opponent won)
-    if depth == 0:
-        return get_score(check_win(game, board))
+    game_over = check_win(game, board)
+    # debug_print(depth)
+    if game_over > 0 or depth == 1:
+        return get_score(game_over)
 
     if max_player:
         # Max
@@ -100,17 +102,17 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             new_game[number][num] = 1
             # save this state
             new_node = Node(node, new_game, num, not max_player)
-            node.children.append(new_node)
             curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
+            node.children.append(new_node)
             if curr_value > max_value:
                 max_value = curr_value
-                best_node[0] = new_node
+                best_node[0] = num
 
-            if curr_value > alphabeta[0]:
-                alphabeta[0] = curr_value
-            # Beta
-            if alphabeta[1] <= alphabeta[0]:
-                break
+            # # Beta
+            # if curr_value > alphabeta[0]:
+            #     alphabeta[0] = curr_value
+            # if alphabeta[1] <= alphabeta[0]:
+            #     break
         return max_value
     else:
         # Min
@@ -124,18 +126,18 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             new_game[number][num] = 2
             # save this state
             new_node = Node(node, new_game, num, not max_player)
-            node.children.append(new_node)
             curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
+            node.children.append(new_node)
             min_value = min(curr_value, min_value)
             if curr_value < min_value:
                 min_value = curr_value
-                best_node[0] = new_node
+                best_node[0] = num
 
             # alpha
-            if curr_value < alphabeta[1]:
-                alphabeta[1] = curr_value
-            if alphabeta[1] <= alphabeta[0]:
-                break
+            # if curr_value < alphabeta[1]:
+            #     alphabeta[1] = curr_value
+            # if alphabeta[1] <= alphabeta[0]:
+            #     break
         return min_value     
 
 # do some magic and get the best move
@@ -149,9 +151,12 @@ def optimal_move():
     best = [None]
     score = minimax_ab(root, copy_game(game_boards), last_move, curr_board, [-math.inf, math.inf], True, best, depth)
     # root.print_node()
-    best_move = random.choice(best).board
+    best_move = random.choice(best)
     debug_print('Choices -> {}'.format(len(best)))
     debug_print('Best -> {}|{}'.format(score, best_move))
+    
+    if score == 0:
+        return dummy_move()
     return best_move
 
 # get a random move
