@@ -73,14 +73,19 @@ node is the current node
 max_player (max or min)
 '''
 # build a tree from current game with a depth limit
-def minimax_ab(node, game, board, max_player, depth):
+def minimax_ab(node, game, board, alphabeta, max_player, depth):
     # depth reached 0 or game ends (player or opponent won)
     if depth == 0 or check_win(game, board):
         return node
+    
     if max_player:
         # Max
+        max_value = -math.inf
+        for child in node.children:
+            value = minimax_ab(child, )
     else:
         # Min
+        min_value = -math.inf
 
 # do some magic and get the best move
 def optimal_move():
@@ -90,7 +95,8 @@ def optimal_move():
 
     # find best move
     tree = Node(None, True, copy.deepcopy(game_boards), curr_board, 0)
-    best_node = minimax_ab(tree, copy.deepcopy(game_boards), curr_board, True, depth)
+    best_node = minimax_ab(tree, copy.deepcopy(game_boards), 
+        curr_board, [-math.inf, math.inf], True, depth)
     best_move = best_node.number
     debug_print('Best -> B{}N{}'.format(curr_board, best_move))
     return best_move
