@@ -27,10 +27,9 @@ from debug import *
 game_boards = [[0] * 10 for i in range(10)]
 moves = 1
 curr_board = 0
-tree_size = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 4
+min_depth = 3
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -42,40 +41,58 @@ def adapative_depth(moves):
     depth += math.floor(moves / 81 * (max_depth - min_depth))
     return int(depth)
 
+# check if there is a winner 
+def check_win(game, board):
+    win = 0
+    curr = game[board]
+
+    # check rows
+    for i in range(1, 4):
+        start = i * 3 - 2
+        if curr[start] == curr[start + 1] == curr[start + 2]:
+            return curr[start]
+
+    # check columns
+    for i in range(1, 4):
+        if curr[i] == curr[i + 3] == curr[i + 6]:
+            return curr[i]
+    
+    # check diagonals
+    if curr[1] == curr[5] == curr[9]:
+        return curr[1]
+    if curr[3] == curr[5] == curr[7]:
+        return curr[3]
+
+    # no wins
+    return win
+
 '''
-root -> Tree or Node
-board -> current board
-player -> player(1) or opponent(2)
-curr_depth -> number
-max_depth -> number
+game, board and number are the state
+depth limits the search
+node is the current node
+max_player (max or min)
 '''
 # build a tree from current game with a depth limit
-def build_tree(root, game, board, player, curr_depth, max_depth):
-    # termination
-    if (curr_depth > max_depth):
-        return
-
-    # loop through all possible situation
-    new_depth = curr_depth + 1
-    for num in range(1, 10):
-
-        # must be zero (illegal move otherwise)
-        illegal_move = game[board][num] > 0
-        if illegal_move:
-            continue
+def minimax_ab(node, game, board, alphabeta, max_player, depth):
+    # depth reached 0 or game ends (player or opponent won)
+    if depth == 0 or check_win(game, board):
+        return node
     
-        # build tree recursively
-        curr = Node(root, player, copy.deepcopy(game), board, num)        
-        root.children.append(curr)
-        global tree_size
-        tree_size += 1
-        build_tree(curr, curr.game, num, not player, new_depth, max_depth)
+    if max_player:
+        # Max
+        max_value = -math.inf
+        for child in node.children:
+            value = minimax_ab(child, )
+    else:
+        # Min
+        min_value = -math.inf
 
 # do some magic and get the best move
 def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves)
     debug_print('Depth: {}'.format(depth))
+<<<<<<< HEAD
     root = Tree()
     # build a new tree and search through it
     build_tree(root, copy.deepcopy(game_boards), curr_board, True, 1, depth)
@@ -88,6 +105,16 @@ def optimal_move():
     best = root.minimax_ab(root, [-math.inf, math.inf])
     debug_print('Best -> B{}N{}'.format(curr_board, best))
     return 1
+=======
+
+    # find best move
+    tree = Node(None, True, copy.deepcopy(game_boards), curr_board, 0)
+    best_node = minimax_ab(tree, copy.deepcopy(game_boards), 
+        curr_board, [-math.inf, math.inf], True, depth)
+    best_move = best_node.number
+    debug_print('Best -> B{}N{}'.format(curr_board, best_move))
+    return best_move
+>>>>>>> f947b9dcb26ea241339ff7470aa7f4209eab0228
 
 # get a random move
 def dummy_move():
