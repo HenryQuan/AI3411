@@ -15,6 +15,6 @@ class Node:
 
     # This node and its children
     def print_node(self):
-        debug_print('Board - {}'.format(self.game[self.board]))
+        debug_print('B{} - {}'.format(self.board, self.game[self.board]))
         for i in self.children:
             i.print_node()

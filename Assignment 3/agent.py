@@ -29,7 +29,7 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
+min_depth = 2
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -66,6 +66,9 @@ def check_win(game, board):
     # no wins
     return win
 
+def copy_game(game):
+    return copy.deepcopy(game)
+
 '''
 game, board and number are the state
 depth limits the search
@@ -76,16 +79,35 @@ max_player (max or min)
 def minimax_ab(node, game, board, alphabeta, max_player, depth):
     # depth reached 0 or game ends (player or opponent won)
     if depth == 0 or check_win(game, board):
-        return node
+        return
     
-    if max_player:
-        # Max
-        max_value = -math.inf
-        for child in node.children:
-            value = minimax_ab(child, )
-    else:
-        # Min
-        min_value = -math.inf
+    for num in range(1, 10):
+        new_game = copy_game(game)
+        # illegal moves
+        if new_game[board][num] > 0:
+            continue
+
+        # place the move
+        if max_player:
+            new_game[board][num] = 1
+        else:
+            new_game[board][num] = 2
+
+        win = check_win(new_game, board)
+        
+        new_node = Node(node, new_game, num, not max_player)
+        node.children.append(new_node)
+        minimax_ab(new_node, new_game, num, alphabeta, not max_player, depth - 1)
+
+    # if max_player:
+    #     # Max
+    #     max_value = -math.inf
+
+    #     for child in node.children:
+    #         value = minimax_ab(child, )
+    # else:
+    #     # Min
+    #     min_value = -math.inf
 
 # do some magic and get the best move
 def optimal_move():
@@ -94,11 +116,11 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
 
     # find best move
-    tree = Node(None, True, copy.deepcopy(game_boards), curr_board, 0)
-    best_node = minimax_ab(tree, copy.deepcopy(game_boards), 
-        curr_board, [-math.inf, math.inf], True, depth)
-    best_move = best_node.number
-    debug_print('Best -> B{}N{}'.format(curr_board, best_move))
+    root = Node(None, copy_game(game_boards), curr_board, True)
+    minimax_ab(root, copy_game(game_boards), curr_board, [-math.inf, math.inf], True, depth)
+    root.print_node()
+    best_move = best_node.board
+    debug_print('Best -> {}'.format(best_move))
     return best_move
 
 # get a random move
