@@ -30,7 +30,7 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
+min_depth = 5
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -68,10 +68,8 @@ def check_win(game, board):
     return win
 
 def get_score(win):
-    if win == 0:
-        return 0
-    elif win == 1:
-        return 1
+    if win < 2:
+        return win
     else:
         return -1
 
@@ -95,43 +93,49 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
         max_value = -math.inf
         for num in range(1, 10):
             # illegal moves
-            if game[board][num] > 0:
+            if game[number][num] > 0:
                 continue
             # place move
             new_game = copy_game(game)
-            new_game[board][num] = 1
+            new_game[number][num] = 1
             # save this state
             new_node = Node(node, new_game, num, not max_player)
             node.children.append(new_node)
-            curr_value = minimax_ab(new_node, new_game, board, num, alphabeta, not max_player, best_node, depth - 1)
+            curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
             if curr_value > max_value:
                 max_value = curr_value
-                best_node.clear()
-                best_node.append(new_node)
-            elif curr_value == max_value:
-                best_node.append(new_node)
+                best_node[0] = new_node
+
+            if curr_value > alphabeta[0]:
+                alphabeta[0] = curr_value
+            # Beta
+            if alphabeta[1] <= alphabeta[0]:
+                break
         return max_value
     else:
         # Min
         min_value = math.inf
         for num in range(1, 10):
             # illegal moves
-            if game[board][num] > 0:
+            if game[number][num] > 0:
                 continue
             # place move for opponent
             new_game = copy_game(game)
-            new_game[board][num] = 2
+            new_game[number][num] = 2
             # save this state
             new_node = Node(node, new_game, num, not max_player)
             node.children.append(new_node)
-            curr_value = minimax_ab(new_node, new_game, board, num, alphabeta, not max_player, best_node, depth - 1)
+            curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
             min_value = min(curr_value, min_value)
             if curr_value < min_value:
                 min_value = curr_value
-                best_node.clear()
-                best_node.append(new_node)
-            elif curr_value == min_value:
-                best_node.append(new_node)
+                best_node[0] = new_node
+
+            # alpha
+            if curr_value < alphabeta[1]:
+                alphabeta[1] = curr_value
+            if alphabeta[1] <= alphabeta[0]:
+                break
         return min_value     
 
 # do some magic and get the best move
@@ -146,6 +150,7 @@ def optimal_move():
     score = minimax_ab(root, copy_game(game_boards), last_move, curr_board, [-math.inf, math.inf], True, best, depth)
     # root.print_node()
     best_move = random.choice(best).board
+    debug_print('Choices -> {}'.format(len(best)))
     debug_print('Best -> {}|{}'.format(score, best_move))
     return best_move
 
