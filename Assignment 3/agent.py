@@ -63,19 +63,13 @@ def build_tree(root, game, board, player, curr_depth, max_depth):
         illegal_move = game[board][num] > 0
         if illegal_move:
             continue
-        
-        new_board = copy.deepcopy(game)
-        if player:
-            new_board[board][num] = 1
-        else:
-            new_board[board][num] = 2
     
         # build tree recursively
-        curr = Node(root, player, new_board[board], num)        
+        curr = Node(root, player, copy.deepcopy(game), board, num)        
         root.children.append(curr)
         global tree_size
         tree_size += 1
-        build_tree(curr, new_board, num, not player, new_depth, max_depth)
+        build_tree(curr, curr.game, num, not player, new_depth, max_depth)
 
 # do some magic and get the best move
 def optimal_move():
