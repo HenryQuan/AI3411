@@ -41,6 +41,31 @@ def adapative_depth(moves):
     depth += math.floor(moves / 81 * (max_depth - min_depth))
     return int(depth)
 
+# check if there is a winner 
+def check_win(game, board):
+    win = 0
+    curr = game[board]
+
+    # check rows
+    for i in range(1, 4):
+        start = i * 3 - 2
+        if curr[start] == curr[start + 1] == curr[start + 2]:
+            return curr[start]
+
+    # check columns
+    for i in range(1, 4):
+        if curr[i] == curr[i + 3] == curr[i + 6]:
+            return curr[i]
+    
+    # check diagonals
+    if curr[1] == curr[5] == curr[9]:
+        return curr[1]
+    if curr[3] == curr[5] == curr[7]:
+        return curr[3]
+
+    # no wins
+    return win
+
 '''
 game, board and number are the state
 depth limits the search
@@ -50,6 +75,7 @@ max_player (max or min)
 # build a tree from current game with a depth limit
 def minimax_ab(node, game, board, max_player, depth):
     # depth reached 0 or game ends (player or opponent won)
+    if 
     if depth == 0:
         return node
 
@@ -60,7 +86,7 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
 
     # find best move
-    tree = Node()
+    tree = Node(None, True, copy.deepcopy(game_boards), curr_board, 0)
     best_node = minimax_ab(tree, copy.deepcopy(game_boards), curr_board, True, depth)
     best_move = best_node.number
     debug_print('Best -> B{}N{}'.format(curr_board, best_move))
