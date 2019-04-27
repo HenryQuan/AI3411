@@ -40,6 +40,8 @@ def adapative_depth(moves):
     depth = min_depth
     debug_print('\nMoves: {}'.format(moves))
     depth = depth + math.floor(moves / 81 * (max_depth - min_depth))
+    if depth % 2 == 0:
+        depth -= 1
     return int(depth)
 
 '''
