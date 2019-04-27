@@ -87,7 +87,7 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
     # depth reached 0 or game ends (player or opponent won)
     game_over = check_win(game, board)
     # debug_print(depth)
-    if game_over > 0 or depth == 1:
+    if game_over > 0 or depth == 0:
         return get_score(game_over)
 
     if max_player:
