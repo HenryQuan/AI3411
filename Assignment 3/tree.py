@@ -19,36 +19,36 @@ class Tree:
     # minimax with alpha-beta pruning
     def minimax_ab(self, root, alphabeta, mode=True):
         # debug_print('H{}B{}'.format(root.heuristic, root.number))
-        if len(root.children) == 0:
-            return root.heuristic
+        if len(root.children) == 0 or not root.heuristic == 0:
+            return root
 
         # try something else
         if mode:
-            best_move = 0
+            best_node = None
             best = -math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, False)
-                if choice > best:
-                    best = choice
-                    best_move = node.number
+                if (choice.heuristic >= best):
+                    best = choice.heuristic
+                    best_node = node
                 
                 alphabeta[0] = max(alphabeta[0], best)
                 if alphabeta[1] <= alphabeta[0]:
                     break
-            return best_move            
+            return best_node            
         else:
-            best_move = 0
+            best_node = None
             worst = math.inf
             for node in root.children:
                 choice = self.minimax_ab(node, alphabeta, True)
-                if choice < worst:
-                    worst = choice
-                    best_move = node.number
+                if (choice.heuristic <= worst):
+                    worst = choice.heuristic
+                    best_node = node
 
                 alphabeta[1] = min(alphabeta[1], worst)
                 if alphabeta[1] <= alphabeta[0]:
                     break              
-            return best_move
+            return best_node
 
     # print the entire tree
     def print_tree(self):
@@ -81,8 +81,10 @@ class Node:
         win = self._check_win(board, num)
         # win -> 1, lose -> 2, no wins or draw -> 0
         if win == 1:
+            debug_print('win')
             return 1
         elif win == 2:
+            debug_print('lose')
             return -1
         else:
             return 0

@@ -13,7 +13,7 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 
 import socket
 import random, math
-import sys
+import sys, copy
 from tree import * 
 from debug import *
 
@@ -73,8 +73,9 @@ def build_tree(root, game, board, player, curr_depth, max_depth):
         global tree_size
         tree_size += 1
     
+    new_depth = 1 + curr_depth
     for node in root.children:
-        build_tree(node, game, node.number, not player, curr_depth + 1, max_depth)
+        build_tree(node, game, node.number, not player, new_depth, max_depth)
 
 # do some magic and get the best move
 def optimal_move():
@@ -83,15 +84,18 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
     root = Tree()
     # build a new tree and search through it
-    build_tree(root, game_boards.copy(), curr_board, True, 1, depth)
+    build_tree(root, copy.deepcopy(game_boards), curr_board, True, 1, depth)
     # root.print_tree()
-    global tree_size 
+
+    global tree_size
     print('Tree - {}'.format(tree_size))
     tree_size = 1
 
     best = root.minimax_ab(root, [-math.inf, math.inf])
-    debug_print('Best -> B{}N{}'.format(curr_board, best))
-    return best
+    while best.parent.parent != None:
+        best = best.parent
+    debug_print('Best -> B{}N{}'.format(curr_board, best.number))
+    return best.number
 
 # get a random move
 def dummy_move():
