@@ -29,7 +29,7 @@ moves = 1
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 4
+min_depth = 3
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -75,9 +75,12 @@ max_player (max or min)
 # build a tree from current game with a depth limit
 def minimax_ab(node, game, board, max_player, depth):
     # depth reached 0 or game ends (player or opponent won)
-    if 
-    if depth == 0:
+    if depth == 0 or check_win(game, board):
         return node
+    if max_player:
+        # Max
+    else:
+        # Min
 
 # do some magic and get the best move
 def optimal_move():
