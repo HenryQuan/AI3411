@@ -30,8 +30,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 5
-max_depth = 10
+min_depth = 3
+max_depth = 5
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -122,7 +122,7 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             # save this state
             new_node = Node(node, new_game, num, not max_player)
             node.children.append(new_node)
-            curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
+            curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, False, best_node, depth - 1)
             if curr_value > max_value:
                 max_value = curr_value
                 best_node[0] = num
@@ -146,7 +146,7 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             # save this state
             new_node = Node(node, new_game, num, not max_player)
             node.children.append(new_node)
-            curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
+            curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, True, best_node, depth - 1)
             if curr_value < min_value:
                 min_value = curr_value
                 best_node[0] = num
@@ -166,7 +166,7 @@ def optimal_move():
 
     # find best move
     root = Node(None, copy_game(game_boards), curr_board, True)
-    best = [None]
+    best = [0]
     score = minimax_ab(root, copy_game(game_boards), last_move, curr_board, [-math.inf, math.inf], True, best, depth)
     # root.print_node()
     best_move = random.choice(best)
@@ -219,8 +219,8 @@ def place(board, num, player):
     global curr_board, moves, last_move
     curr_board = num
     last_move = board
-    moves += 1
     game_boards[board][num] = player
+    moves += 1
 
 # Parse command from server (modified from Zac senpai's code)
 def parse(string):
