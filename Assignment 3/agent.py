@@ -31,8 +31,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 2
-max_depth = 2
+min_depth = 3
+max_depth = 3git
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -75,7 +75,22 @@ def get_score(game, board):
     elif win == 2:
         return -100
     else:
-        return 0
+        score = 0
+        for num in range(1, 10):
+            temp = 0
+            curr = game[board][num]
+            if curr > 0:
+                if num in [1, 3, 7, 9]:
+                    temp = 3
+                elif num in [2, 4, 6, 8]:
+                    temp = 2
+                else:
+                    temp = 4
+
+                if curr == 2:
+                    temp *= -1
+                score += temp
+        return score
 
 def copy_game(game):
     return copy.deepcopy(game)
@@ -87,34 +102,48 @@ node is the current node
 max_player (max or min)
 '''
 # build a tree from current game with a depth limit
-def minimax_ab(node, game, board, number, max_player, depth):
-    # debug_print(depth)
+def minimax_ab(node, game, board, number, alpha, beta, max_player, depth):
     win = check_win(game, board)
     if win > 0 or depth == 0:
         return get_score(game, board)
         
     # build tree and then get min or max
-    best = []
-    for num in range(1, 10):
-        # illegal moves
-        if game[number][num] > 0:
-            continue
-
-        # place move
-        new_game = copy_game(game)
-        if max_player:
-            new_game[number][num] = 1
-        else:
-            new_game[number][num] = 2
-        # save this state
-        new_node = Node(node, new_game, num, not max_player)
-        node.children.append(new_node)
-        best.append(minimax_ab(new_node, new_game, last_move, curr_board, not max_player, depth - 1))
-
     if max_player:
-        return max(best)
+        max_score = -math.inf
+        for num in range(1, 10):
+            # illegal moves
+            if game[number][num] > 0:
+                continue
+
+            # place move
+            new_game = copy_game(game)
+            new_game[number][num] = 1
+            # save this state
+            new_node = Node(node, new_game, num, True)
+            curr = minimax_ab(new_node, new_game, number, num, alpha, beta, not max_player, depth - 1)
+            max_score = max(max_score, curr)
+            # alpha = max(alpha, curr)
+            # if beta <= alpha:
+            #     break
+        return max_score
     else:
-        return min(best)
+        min_score = math.inf
+        for num in range(1, 10):
+            # illegal moves
+            if game[number][num] > 0:
+                continue
+
+            # place move
+            new_game = copy_game(game)
+            new_game[number][num] = 2
+            # save this state
+            new_node = Node(node, new_game, num, False)
+            curr = minimax_ab(new_node, new_game, number, num, alpha, beta, not max_player, depth - 1)
+            min_score = min(min_score, curr)
+            # beta = min(beta, curr)
+            # if beta <= alpha:
+            #     break 
+        return min_score
 
 # do some magic and get the best move
 def optimal_move():
@@ -134,8 +163,7 @@ def optimal_move():
         new_game[curr_board][num] = 1
         # save this state
         new_node = Node(root, new_game, num, True)
-        root.children.append(new_node)
-        all_moves.append([minimax_ab(new_node, new_game, last_move, curr_board, False, depth - 1), num])
+        all_moves.append([minimax_ab(new_node, new_game, last_move, curr_board, math.inf, -math.inf, False, depth - 1), num])
 
     # root.print_node()
     debug_print(all_moves)
