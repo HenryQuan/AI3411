@@ -131,6 +131,9 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             # Max
             if score > alphabeta[0]:
                 alphabeta[0] = score
+                temp = child
+                while not temp.parent.parent == None:
+                    temp = temp.parent
                 best_node[0] = child.board
             # Beta cut
             if alphabeta[1] <= alphabeta[0]:
@@ -144,6 +147,9 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             # Min
             if score < alphabeta[1]:
                 alphabeta[1] = score
+                temp = child
+                while not temp.parent.parent == None:
+                    temp = temp.parent
                 best_node[0] = child.board
             # Alpha cut
             if alphabeta[1] <= alphabeta[0]:
@@ -161,7 +167,7 @@ def optimal_move():
     root = Node(None, copy_game(game_boards), curr_board, True)
     best = [0]
     score = minimax_ab(root, copy_game(game_boards), last_move, curr_board, [-math.inf, math.inf], True, best, depth)
-    root.print_node()
+    # root.print_node()
     best_move = best[0]
     debug_print('Best -> {}|{}'.format(score, best_move))
 
