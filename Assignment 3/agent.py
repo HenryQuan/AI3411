@@ -30,8 +30,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 2
-max_depth = 9
+min_depth = 10
+max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -107,47 +107,56 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
     # debug_print(depth)
     if game_over > 0 or depth == 0:
         return get_score(game, board, max_player)
-
-    # build tree and then get min or max
-    for num in range(1, 10):
-        # illegal moves
-        if game[number][num] > 0:
-            continue
-        # place move
-        new_game = copy_game(game)
-        new_game[number][num] = 1
-        # save this state
-        new_node = Node(node, new_game, num, not max_player)
-        node.children.append(new_node)
-        score = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
         
-        if max_player:
+    if max_player:
+        # build tree and then get min or max
+        for num in range(1, 10):
+            # illegal moves
+            if game[number][num] > 0:
+                continue
+            # place move
+            new_game = copy_game(game)
+            new_game[number][num] = 1
+            # save this state
+            new_node = Node(node, new_game, num, not max_player)
+            node.children.append(new_node)
+            score = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
+        
             # Max
-            max_value = -math.inf
-            if score > max_value:
-                max_value = score
-                best_node[0] = num
+            if score > alphabeta[0]:
+                alphabeta[0] = score
+                while not node.parent == None:
+                    node = node.parent
+                best_node[0] = node.board
+            if alphabeta[1] <= alphabeta[0]:
+                break
 
-            # Beta
-            # if curr_value > alphabeta[0]:
-            #     alphabeta[0] = curr_value
-            # if alphabeta[1] <= alphabeta[0]:
-            #     break
-            return max_value
-        else:
-            # Min
-            min_value = math.inf
-            if score < min_value:
-                min_value = score
-                best_node[0] = num
-
-            # alpha
-            # if curr_value < alphabeta[1]:
-            #     alphabeta[1] = curr_value
-            # if alphabeta[1] <= alphabeta[0]:
-            #     break
-            return min_value     
+        return alphabeta[0]
+    else:
+        # build tree and then get min or max
+        for num in range(1, 10):
+            # illegal moves
+            if game[number][num] > 0:
+                continue
+            # place move
+            new_game = copy_game(game)
+            new_game[number][num] = 1
+            # save this state
+            new_node = Node(node, new_game, num, not max_player)
+            node.children.append(new_node)
+            score = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
         
+            # Min
+            if score < alphabeta[1]:
+                alphabeta[1] = score
+                while not node.parent == None:
+                    node = node.parent
+                best_node[0] = node.board
+            if alphabeta[1] <= alphabeta[0]:
+                break
+
+        return alphabeta[1]
+    
 
 # do some magic and get the best move
 def optimal_move():
