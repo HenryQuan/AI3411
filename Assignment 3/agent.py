@@ -33,8 +33,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 10
-max_depth = 20
+min_depth = 5
+max_depth = 8
 # this is only for fun
 player_name = 'Stupid Henry'
 
@@ -42,7 +42,7 @@ player_name = 'Stupid Henry'
 def adapative_depth(moves):
     depth = min_depth
     debug_print('\nMoves: {}'.format(moves))
-    depth += math.floor(moves / 81 * (max_depth - min_depth))
+    depth += math.floor(moves / 41 * (max_depth - min_depth))
     return int(depth)
 
 # make a copy of current game board
@@ -64,23 +64,24 @@ def minimax(node, max_player, alpha, beta, depth):
         node.children.append(new_node)
     
     # max or min depending on max_player
-    best_value = -math.inf if max_player else math.inf
-    for child in node.children:
-        # if not curr_value == 0:
-        #     debug_print(curr_value)
-        curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
-
-        if max_player:
-            best_value = max(curr_value, best_value)
-            alpha = max(curr_value, best_value)
+    if max_player:
+        for child in node.children:
+            # if not curr_value == 0:
+            #     debug_print(curr_value)
+            curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
+            alpha = max(curr_value, alpha)
             if beta <= alpha:
                 break
-        else:
-            best_value = min(curr_value, best_value)
-            beta = min(curr_value, best_value)
+        return alpha            
+    else:
+        for child in node.children:
+            # if not curr_value == 0:
+            #     debug_print(curr_value)
+            curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
+            beta = min(curr_value, beta)
             if beta <= alpha:
                 break
-    return best_value
+        return beta            
 
 # do some magic and get the best move
 def optimal_move():
