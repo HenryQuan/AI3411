@@ -45,107 +45,9 @@ def adapative_depth(moves):
     depth += math.floor(moves / 81 * (max_depth - min_depth))
     return int(depth)
 
-# check if there is a winner 
-def check_win(game, board):
-    win = 0
-    curr = game[board]
-
-    # check rows
-    for i in range(1, 4):
-        start = i * 3 - 2
-        if curr[start] == curr[start + 1] == curr[start + 2]:
-            return curr[start]
-
-    # check columns
-    for i in range(1, 4):
-        if curr[i] == curr[i + 3] == curr[i + 6]:
-            return curr[i]
-    
-    # check diagonals
-    if curr[1] == curr[5] == curr[9]:
-        return curr[1]
-    if curr[3] == curr[5] == curr[7]:
-        return curr[3]
-
-    # no wins
-    return win
-
-def get_score(game, board):
-    win = check_win(game, board)
-    if win == 1:
-        return 100
-    elif win == 2:
-        return -100
-    else:
-        score = 0
-        # for num in range(1, 10):
-        #     temp = 0
-        #     curr = game[board][num]
-        #     if curr > 0:
-        #         if num in [1, 3, 7, 9]:
-        #             temp = 3
-        #         elif num in [2, 4, 6, 8]:
-        #             temp = 2
-        #         else:
-        #             temp = 4
-
-        #         if curr == 2:
-        #             temp *= -1
-        #         score += temp
-        return score
-
-def copy_game(game):
+# make a copy of current game board
+def copy(game):
     return copy.deepcopy(game)
-
-'''
-game, board and number are the state
-depth limits the search
-node is the current node
-max_player (max or min)
-'''
-# build a tree from current game with a depth limit
-def minimax_ab(node, game, board, number, alpha, beta, max_player, depth):
-    win = check_win(game, board)
-    if win > 0 or depth == 0:
-        return get_score(game, board)
-        
-    # build tree and then get min or max
-    if max_player:
-        max_score = -math.inf
-        for num in range(1, 10):
-            # illegal moves
-            if game[number][num] > 0:
-                continue
-
-            # place move
-            new_game = copy_game(game)
-            new_game[number][num] = 1
-            # save this state
-            new_node = Node(node, new_game, num, True)
-            curr = minimax_ab(new_node, new_game, number, num, alpha, beta, not max_player, depth - 1)
-            max_score = max(max_score, curr)
-            # alpha = max(alpha, curr)
-            # if beta <= alpha:
-            #     break
-        return max_score
-    else:
-        min_score = math.inf
-        for num in range(1, 10):
-            # illegal moves
-            if game[number][num] > 0:
-                continue
-
-            # place move
-            new_game = copy_game(game)
-            new_game[number][num] = 2
-            # save this state
-            new_node = Node(node, new_game, num, False)
-            curr = minimax_ab(new_node, new_game, number, num, alpha, beta, not max_player, depth - 1)
-            min_score = min(min_score, curr)
-            # beta = min(beta, curr)
-            # if beta <= alpha:
-            #     break 
-        return min_score
 
 # do some magic and get the best move
 def optimal_move():
@@ -153,21 +55,6 @@ def optimal_move():
     depth = adapative_depth(moves)
     debug_print('Depth: {}'.format(depth))
 
-    # find best move
-    root = Node(None, copy_game(game_boards), curr_board, True)
-    optimal_move = minimax_ab(root, game_boards, last_move, curr_board, math.inf, -math.inf, True, depth - 1)
-
-    # root.print_node()
-    debug_print(optimal_move)
-    # best_moves = []
-    # max_score = -math.inf
-    # for t in all_moves:
-    #     max_score = max(max_score, t[0])
-    # for t in all_moves:
-    #     if t[0] == max_score:
-    #         best_moves.append(t[1])
-    # choice = random.choice(best_moves)
-    # debug_print('-> {}'.format(choice))
     return dummy_move()
 
 # get a random move
