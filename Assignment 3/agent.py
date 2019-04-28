@@ -53,7 +53,9 @@ def copy(game):
 def minimax(node, max_player, depth):
     # depth reached or game ended
     curr_state = node.state.current_state()
-    if depth == 0 or curr_state > 0:
+    if curr_state > 0:
+        return node.state.get_score(curr_state)
+    if depth == 0:
         return node.state.get_score(curr_state)
 
     # max or min depending on max_player
@@ -67,7 +69,9 @@ def minimax(node, max_player, depth):
     
     for child in node.children:
         curr_value = minimax(child, not max_player, depth - 1)
-        # debug_print(curr_value)
+        if not curr_value == 0:
+            debug_print(curr_value)
+
         if max_player:
             best_value = max(curr_value, best_value)
         else:
@@ -79,6 +83,7 @@ def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves)
     debug_print('Depth: {}'.format(depth))
+    debug_print('Board: {}'.format(curr_board))
 
     # max 9 possible choices and pick the best one
     all_choices = []
@@ -160,7 +165,7 @@ def place(board, num, player):
     last_move = board
     game_boards[board][num] = player
     moves += 1
-    # print_board(game_boards)
+    print_board(game_boards)
 
 # Parse command from server (modified from Zac senpai's code)
 def parse(string):
