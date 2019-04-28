@@ -8,6 +8,7 @@ class Node:
     def __init__(self, parent, game, board, max_player):
         self.parent = parent
         # game state
+        self.score = 0
         self.game = game
         self.board = board
         # more moves
