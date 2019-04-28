@@ -67,7 +67,7 @@ def check_win(game, board):
     # no wins
     return win
 
-def get_score(game, board, max_player):
+def get_score(game, board):
     score = 0
     win = check_win(game, board)
     if win == 1:
@@ -106,7 +106,8 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
     game_over = check_win(game, board)
     # debug_print(depth)
     if game_over > 0 or depth == 0:
-        return get_score(game, board, max_player)
+        debug_print('back')
+        return get_score(game, board)
         
     if max_player:
         # build tree and then get min or max
@@ -121,12 +122,11 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             new_node = Node(node, new_game, num, not max_player)
             node.children.append(new_node)
             score = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
-        
             # Max
             if score > alphabeta[0]:
                 alphabeta[0] = score
                 # get the top node
-                while not node.parent == None:
+                while not node.parent.parent == None:
                     node = node.parent
                 best_node[0] = node.board
             # Beta cut
@@ -152,15 +152,14 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             if score < alphabeta[1]:
                 alphabeta[1] = score
                 # get the top node
-                while not node.parent == None:
+                while not node.parent.parent == None:
                     node = node.parent
                 best_node[0] = node.board
             # Alpha cut
             if alphabeta[1] <= alphabeta[0]:
                 break
 
-        return alphabeta[1]
-    
+        return alphabeta[1]    
 
 # do some magic and get the best move
 def optimal_move():
