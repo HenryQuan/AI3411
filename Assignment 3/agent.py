@@ -33,7 +33,7 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
+min_depth = 2
 max_depth = 3
 # this is only for fun
 player_name = 'Stupid Henry'
@@ -52,9 +52,9 @@ def copy(game):
 # consider optimal play
 def minimax(node, max_player, depth):
     # depth reached or game ended
-    if depth == 0 or node.state.current_state() > 0:
-        debug_print(node.state.get_score())
-        return node.state.get_score()
+    curr_state = node.state.current_state()
+    if depth == 0 or curr_state > 0:
+        return node.state.get_score(curr_state)
 
     # max or min depending on max_player
     best_value = -math.inf if max_player else math.inf
@@ -67,6 +67,7 @@ def minimax(node, max_player, depth):
     
     for child in node.children:
         curr_value = minimax(child, not max_player, depth - 1)
+        # debug_print(curr_value)
         if max_player:
             best_value = max(curr_value, best_value)
         else:
@@ -80,7 +81,6 @@ def optimal_move():
     debug_print('Depth: {}'.format(depth))
 
     # max 9 possible choices and pick the best one
-    valid_moves = []
     all_choices = []
     for choice in range(1, 10):
         if game_boards[curr_board][choice] > 0:
@@ -90,13 +90,20 @@ def optimal_move():
         new_board = copy(game_boards)
         new_board[curr_board][choice] = 1
         node = Node(None, State(new_board, curr_board, choice), True)
-        valid_moves.append(choice)
-        all_choices.append(minimax(node, False, depth - 1))
+        all_choices.append([choice, minimax(node, False, depth - 1)])
 
     debug_print(all_choices)
-    debug_print(valid_moves)
+    best_moves = []
+    max_value = -math.inf
+    for pair in all_choices:
+        max_value = max(pair[1], max_value)
+    for pair in all_choices:        
+        if pair[1] == max_value:
+            best_moves.append(pair[0])
 
-    return 1
+    last = random.choice(best_moves)
+    debug_print('{} -> {}'.format(last, best_moves))
+    return last
 
 # get a random move
 def dummy_move():

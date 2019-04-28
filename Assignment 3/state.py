@@ -13,10 +13,10 @@ class State:
     def human(self):
         print('B{}C{}'.format(self.board, self.choice))
 
-    def get_score(self):
-        if self.current_state == 1:
+    def get_score(self, curr_state):
+        if curr_state == 1:
             return 100
-        elif self.current_state == 2:
+        elif curr_state == 2:
             return -100
         else:
             return 0
