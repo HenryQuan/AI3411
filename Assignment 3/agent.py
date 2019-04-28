@@ -13,11 +13,10 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 
 import socket
 import random, math
-import sys, copy
+import sys, copy as COPY
 # some modules to help this
-from node import * 
-from debug import *
-from state import *
+from node import Node
+from debug import debug_print
 
 '''
 9x9 board
@@ -47,7 +46,7 @@ def adapative_depth(moves):
 
 # make a copy of current game board
 def copy(game):
-    return copy.deepcopy(game)
+    return COPY.deepcopy(game)
 
 # do some magic and get the best move
 def optimal_move():
