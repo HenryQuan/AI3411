@@ -48,11 +48,34 @@ def adapative_depth(moves):
 def copy(game):
     return COPY.deepcopy(game)
 
+# consider optimal play
+def minimax(node, depth):
+    if depth > 0:
+        return minimax(node, depth - 1)
+    return 1
+
 # do some magic and get the best move
 def optimal_move():
     # build a tree with a good depth
     depth = adapative_depth(moves)
     debug_print('Depth: {}'.format(depth))
+
+    # max 9 possible choices and pick the best one
+    valid_moves = []
+    all_choices = []
+    for choice in range(1, 10):
+        if game_boards[curr_board][choice] > 0:
+            # already taken
+            continue
+        
+        new_board = copy(game_boards)
+        new_board[curr_board][choice] = 1
+        node = Node(None, new_board, curr_board, choice, True)
+        valid_moves.append(choice)
+        all_choices.append(minimax(node, depth))
+
+    debug_print(all_choices)
+    debug_print(valid_moves)
 
     return dummy_move()
 

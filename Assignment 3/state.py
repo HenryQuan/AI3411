@@ -1,4 +1,6 @@
 
+import copy
+
 class State:
     # game is a copy of the entire board
     # current_board tracks which board we are in
