@@ -30,8 +30,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
-max_depth = 5
+min_depth = 2
+max_depth = 9
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -125,7 +125,10 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, False, best_node, depth - 1)
             if curr_value > max_value:
                 max_value = curr_value
-                best_node[0] = num
+                best_node.clear()
+                best_node.append(num)
+            elif curr_value == max_value:
+                best_node.append(num)
 
             # Beta
             # if curr_value > alphabeta[0]:
@@ -149,7 +152,10 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, True, best_node, depth - 1)
             if curr_value < min_value:
                 min_value = curr_value
-                best_node[0] = num
+                best_node.clear()
+                best_node.append(num)
+            if curr_value == min_value:
+                best_node.append(num)
 
             # alpha
             # if curr_value < alphabeta[1]:
