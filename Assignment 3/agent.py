@@ -14,8 +14,10 @@ The heuristic function will be measuring 'most wins' and the cost is always one 
 import socket
 import random, math
 import sys, copy
-from tree import * 
+# some modules to help this
+from node import * 
 from debug import *
+from state import *
 
 '''
 9x9 board
