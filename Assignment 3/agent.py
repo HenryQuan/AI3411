@@ -61,25 +61,27 @@ def minimax(node, max_player, alpha, beta, depth):
         if new_node == None:
             # already taken
             continue
+        node.state.human()
         node.children.append(new_node)
     
     # max or min depending on max_player
     best_value = -math.inf if max_player else math.inf
     for child in node.children:
-        curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
         # if not curr_value == 0:
         #     debug_print(curr_value)
 
         if max_player:
+            curr_value = minimax(child, False, alpha, beta, depth - 1)
             best_value = max(curr_value, best_value)
-            alpha = max(curr_value, best_value)
-            if beta <= alpha:
-                break
+            # alpha = max(curr_value, best_value)
+            # if beta <= alpha:
+            #     break
         else:
+            curr_value = minimax(child, True, alpha, beta, depth - 1)
             best_value = min(curr_value, best_value)
-            beta = min(curr_value, best_value)
-            if beta <= alpha:
-                break
+            # beta = min(curr_value, best_value)
+            # if beta <= alpha:
+            #     break
     return best_value
 
 # do some magic and get the best move
