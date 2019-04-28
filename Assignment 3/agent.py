@@ -17,6 +17,7 @@ import sys, copy as COPY
 # some modules to help this
 from node import Node
 from debug import debug_print
+from state import State
 
 '''
 9x9 board
@@ -49,13 +50,28 @@ def copy(game):
     return COPY.deepcopy(game)
 
 # consider optimal play
-def minimax(node, depth):
-    debug_print('8')
-    if depth > 0:
-        for choice in range(1, 10):
-            debug_print('88')
-        return minimax(node, depth - 1)
-    return 1
+def minimax(node, max_player, depth):
+    # depth reached or game ended
+    if depth == 0 or node.state.current_state() > 0:
+        debug_print(node.state.get_score())
+        return node.state.get_score()
+
+    # max or min depending on max_player
+    best_value = -math.inf if max_player else math.inf
+    for choice in range(1, 10):
+        new_node = node.new_node(choice)
+        if new_node == None:
+            # already taken
+            continue
+        node.children.append(new_node)
+    
+    for child in node.children:
+        curr_value = minimax(child, not max_player, depth - 1)
+        if max_player:
+            best_value = max(curr_value, best_value)
+        else:
+            best_value = min(curr_value, best_value)
+    return best_value
 
 # do some magic and get the best move
 def optimal_move():
@@ -73,10 +89,9 @@ def optimal_move():
         
         new_board = copy(game_boards)
         new_board[curr_board][choice] = 1
-        debug_print('888')
-        node = Node(None, new_board, curr_board, choice, True)
+        node = Node(None, State(new_board, curr_board, choice), True)
         valid_moves.append(choice)
-        all_choices.append(minimax(node, depth - 1))
+        all_choices.append(minimax(node, False, depth - 1))
 
     debug_print(all_choices)
     debug_print(valid_moves)

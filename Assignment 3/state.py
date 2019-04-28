@@ -13,6 +13,23 @@ class State:
     def human(self):
         print('B{}C{}'.format(self.board, self.choice))
 
+    def get_score(self):
+        if self.current_state == 1:
+            return 100
+        elif self.current_state == 2:
+            return -100
+        else:
+            return 0
+
+    def new_state(self, new_choice, player):
+        if self.game[self.choice][new_choice] > 0:
+            # illegal
+            return None
+        # copy current board and place new choice
+        new_game = copy.deepcopy(self.game)
+        new_game[self.choice][new_choice] = player
+        return State(new_game, self.choice, new_choice)
+
     # get current state
     # 0 -> no wins
     # 1 -> AI wins
