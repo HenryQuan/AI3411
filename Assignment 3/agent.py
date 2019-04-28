@@ -31,8 +31,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 10
-max_depth = 20
+min_depth = 20
+max_depth = 30
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -69,28 +69,13 @@ def check_win(game, board):
     return win
 
 def get_score(game, board):
-    score = 0
     win = check_win(game, board)
     if win == 1:
         return 100
     elif win == 2:
         return -100
     else:
-        for num in range(1, 10):
-            curr = 0
-            taken = game[board][num]
-            if taken > 0:
-                # different score for different moves
-                if num in [1, 3, 7, 9]:
-                    curr += 3
-                elif num in [2, 4, 6, 8]:
-                    curr += 2
-                else:
-                    curr += 4
-                if taken == 2:
-                    curr *= -1
-            score += curr
-    return score
+        return 0
 
 def copy_game(game):
     return copy.deepcopy(game)
@@ -103,10 +88,8 @@ max_player (max or min)
 '''
 # build a tree from current game with a depth limit
 def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, depth):
-    # depth reached 0 or game ends (player or opponent won)
-    game_over = check_win(game, board)
     # debug_print(depth)
-    if game_over > 0 or depth == 0:
+    if depth == 0:
         return get_score(game, board)
         
     # build tree and then get min or max
@@ -127,13 +110,10 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
     if max_player:
         for child in node.children:
             score = minimax_ab(child, child.game, number, child.board, alphabeta, not max_player, best_node, depth - 1)
-
+            # debug_print('Max: {}'.format(score))
             # Max
             if score > alphabeta[0]:
                 alphabeta[0] = score
-                temp = child
-                while not temp.parent.parent == None:
-                    temp = temp.parent
                 best_node[0] = child.board
             # Beta cut
             if alphabeta[1] <= alphabeta[0]:
@@ -143,13 +123,10 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
     else:
         for child in node.children:
             score = minimax_ab(child, child.game, number, child.board, alphabeta, not max_player, best_node, depth - 1)
-
+            # debug_print('Min: {}'.format(score))
             # Min
             if score < alphabeta[1]:
                 alphabeta[1] = score
-                temp = child
-                while not temp.parent.parent == None:
-                    temp = temp.parent
                 best_node[0] = child.board
             # Alpha cut
             if alphabeta[1] <= alphabeta[0]:
@@ -170,7 +147,6 @@ def optimal_move():
     # root.print_node()
     best_move = best[0]
     debug_print('Best -> {}|{}'.format(score, best_move))
-
     return best_move
 
 # get a random move
@@ -228,7 +204,7 @@ def place(board, num, player):
     last_move = board
     game_boards[board][num] = player
     moves += 1
-    print_board(game_boards)
+    # print_board(game_boards)
 
 # Parse command from server (modified from Zac senpai's code)
 def parse(string):
