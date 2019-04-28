@@ -5,3 +5,4 @@ randt
 servt
 .vscode
 __pycache__
+*_test.py

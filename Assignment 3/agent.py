@@ -33,8 +33,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 2
-max_depth = 5
+min_depth = 10
+max_depth = 20
 # this is only for fun
 player_name = 'Stupid Henry'
 
@@ -61,7 +61,6 @@ def minimax(node, max_player, alpha, beta, depth):
         if new_node == None:
             # already taken
             continue
-        node.state.human()
         node.children.append(new_node)
     
     # max or min depending on max_player
@@ -69,19 +68,18 @@ def minimax(node, max_player, alpha, beta, depth):
     for child in node.children:
         # if not curr_value == 0:
         #     debug_print(curr_value)
+        curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
 
         if max_player:
-            curr_value = minimax(child, False, alpha, beta, depth - 1)
             best_value = max(curr_value, best_value)
-            # alpha = max(curr_value, best_value)
-            # if beta <= alpha:
-            #     break
+            alpha = max(curr_value, best_value)
+            if beta <= alpha:
+                break
         else:
-            curr_value = minimax(child, True, alpha, beta, depth - 1)
             best_value = min(curr_value, best_value)
-            # beta = min(curr_value, best_value)
-            # if beta <= alpha:
-            #     break
+            beta = min(curr_value, best_value)
+            if beta <= alpha:
+                break
     return best_value
 
 # do some magic and get the best move
@@ -100,7 +98,7 @@ def optimal_move():
         
         new_board = copy(game_boards)
         new_board[curr_board][choice] = 1
-        node = Node(None, State(new_board, curr_board, choice), True)
+        node = Node(None, State(new_board, curr_board, choice, 1), True)
         all_choices.append([choice, minimax(node, False, -math.inf, math.inf, depth - 1)])
 
     debug_print(all_choices)
