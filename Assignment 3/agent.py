@@ -30,8 +30,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 10
-max_depth = 20
+min_depth = 4
+max_depth = 5
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -123,15 +123,15 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             new_node = Node(node, new_game, num, not max_player)
             curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
             node.children.append(new_node)
-            if curr_value >= max_value:
+            if curr_value > max_value:
                 max_value = curr_value
                 best_node[0] = num
 
             # Beta
-            if curr_value > alphabeta[0]:
-                alphabeta[0] = curr_value
-            if alphabeta[1] <= alphabeta[0]:
-                break
+            # if curr_value > alphabeta[0]:
+            #     alphabeta[0] = curr_value
+            # if alphabeta[1] <= alphabeta[0]:
+            #     break
         return max_value
     else:
         # Min
@@ -148,15 +148,15 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             curr_value = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
             node.children.append(new_node)
             min_value = min(curr_value, min_value)
-            if curr_value <= min_value:
+            if curr_value < min_value:
                 min_value = curr_value
                 best_node[0] = num
 
             # alpha
-            if curr_value < alphabeta[1]:
-                alphabeta[1] = curr_value
-            if alphabeta[1] <= alphabeta[0]:
-                break
+            # if curr_value < alphabeta[1]:
+            #     alphabeta[1] = curr_value
+            # if alphabeta[1] <= alphabeta[0]:
+            #     break
         return min_value     
 
 # do some magic and get the best move
