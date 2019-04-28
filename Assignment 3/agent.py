@@ -26,11 +26,12 @@ from debug import *
 # easy index (don't need to worry about -1)
 game_boards = [[0] * 10 for i in range(10)]
 moves = 1
+player = 1
 last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 10
+min_depth = 5
 max_depth = 20
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
@@ -106,7 +107,6 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
     game_over = check_win(game, board)
     # debug_print(depth)
     if game_over > 0 or depth == 0:
-        debug_print('back')
         return get_score(game, board)
         
     if max_player:
@@ -126,12 +126,12 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             if score > alphabeta[0]:
                 alphabeta[0] = score
                 # get the top node
-                while not node.parent.parent == None:
-                    node = node.parent
-                best_node[0] = node.board
+                while not new_node.parent.parent == None:
+                    new_node = new_node.parent
+                best_node[0] = new_node.board
             # Beta cut
             if alphabeta[1] <= alphabeta[0]:
-                break
+                continue
 
         return alphabeta[0]
     else:
@@ -152,12 +152,12 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             if score < alphabeta[1]:
                 alphabeta[1] = score
                 # get the top node
-                while not node.parent.parent == None:
-                    node = node.parent
-                best_node[0] = node.board
+                while not new_node.parent.parent == None:
+                    new_node = new_node.parent
+                best_node[0] = new_node.board
             # Alpha cut
             if alphabeta[1] <= alphabeta[0]:
-                break
+                continue
 
         return alphabeta[1]    
 
@@ -188,7 +188,10 @@ def dummy_move():
 def print_player(i):
     if i > 2:
         return '.'
-    return ['.', 'X', 'O'][i]
+    if player == 1:
+        return ['.', 'X', 'O'][i]
+    else:
+        return ['.', 'O', 'X'][i]
 
 # print a row (modified from Zac senpai's code)
 def print_row(board, a, b, c, i, j, k):
@@ -240,13 +243,15 @@ def parse(string):
     else:
         command, args = string, []
     
-    global player_name
+    global player_name, player
     if command == 'second_move':
         player_name += ' O'
+        player = 2
         place(int(args[0]), int(args[1]), 2)
         return play()
     elif command == 'third_move':
         player_name += ' X'
+        player = 1
         # place the move that was generated for us
         place(int(args[0]), int(args[1]), 1)
         # place opponent's last move
