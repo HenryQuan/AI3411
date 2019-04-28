@@ -33,8 +33,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 5
-max_depth = 8
+min_depth = 20
+max_depth = 40
 # this is only for fun
 player_name = 'Stupid Henry'
 
@@ -42,7 +42,7 @@ player_name = 'Stupid Henry'
 def adapative_depth(moves):
     depth = min_depth
     debug_print('\nMoves: {}'.format(moves))
-    depth += math.floor(moves / 41 * (max_depth - min_depth))
+    depth += math.floor(moves / 81 * (max_depth - min_depth))
     return int(depth)
 
 # make a copy of current game board
@@ -50,7 +50,7 @@ def copy(game):
     return COPY.deepcopy(game)
 
 # consider optimal play
-def minimax(node, max_player, alpha, beta, depth):
+def minimax(node, max_player, alphabeta, depth):
     # depth reached or game ended
     curr_state = node.state.current_state()
     if curr_state > 0 or depth == 0:
@@ -68,20 +68,20 @@ def minimax(node, max_player, alpha, beta, depth):
         for child in node.children:
             # if not curr_value == 0:
             #     debug_print(curr_value)
-            curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
-            alpha = max(curr_value, alpha)
-            if beta <= alpha:
+            curr_value = minimax(child, not max_player, alphabeta, depth - 1)
+            alphabeta[0] = max(curr_value, alphabeta[0])
+            if alphabeta[1] <= alphabeta[0]:
                 break
-        return alpha            
+        return alphabeta[0]            
     else:
         for child in node.children:
             # if not curr_value == 0:
             #     debug_print(curr_value)
-            curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
-            beta = min(curr_value, beta)
-            if beta <= alpha:
+            curr_value = minimax(child, not max_player, alphabeta, depth - 1)
+            alphabeta[1] = min(curr_value, alphabeta[1])
+            if alphabeta[1] <= alphabeta[0]:
                 break
-        return beta            
+        return alphabeta[1]            
 
 # do some magic and get the best move
 def optimal_move():
@@ -100,7 +100,7 @@ def optimal_move():
         new_board = copy(game_boards)
         new_board[curr_board][choice] = 1
         node = Node(None, State(new_board, curr_board, choice, 1), True)
-        all_choices.append([choice, minimax(node, False, -math.inf, math.inf, depth - 1)])
+        all_choices.append([choice, minimax(node, False, [-math.inf, math.inf], depth - 1)])
 
     debug_print(all_choices)
     best_moves = []
