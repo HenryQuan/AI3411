@@ -50,7 +50,10 @@ def copy(game):
 
 # consider optimal play
 def minimax(node, depth):
+    debug_print('8')
     if depth > 0:
+        for choice in range(1, 10):
+            debug_print('88')
         return minimax(node, depth - 1)
     return 1
 
@@ -70,14 +73,15 @@ def optimal_move():
         
         new_board = copy(game_boards)
         new_board[curr_board][choice] = 1
+        debug_print('888')
         node = Node(None, new_board, curr_board, choice, True)
         valid_moves.append(choice)
-        all_choices.append(minimax(node, depth))
+        all_choices.append(minimax(node, depth - 1))
 
     debug_print(all_choices)
     debug_print(valid_moves)
 
-    return dummy_move()
+    return 1
 
 # get a random move
 def dummy_move():
