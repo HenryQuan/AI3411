@@ -92,6 +92,7 @@ def optimal_move():
 
     # max 9 possible choices and pick the best one
     all_choices = []
+    ab = [-math.inf, math.inf]
     for choice in range(1, 10):
         if game_boards[curr_board][choice] > 0:
             # already taken
@@ -100,7 +101,11 @@ def optimal_move():
         new_board = copy(game_boards)
         new_board[curr_board][choice] = 1
         node = Node(None, State(new_board, curr_board, choice, 1), True)
-        all_choices.append([choice, minimax(node, False, [-math.inf, math.inf], depth - 1)])
+        curr_value = minimax(node, False, ab, depth - 1)
+        ab[0] = max(curr_value, ab[0])
+        if ab[1] <= ab[0]:
+            break
+        all_choices.append([choice, curr_value])
 
     debug_print(all_choices)
     best_moves = []
