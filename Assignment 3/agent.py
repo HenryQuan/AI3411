@@ -31,8 +31,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
-max_depth = 5
+min_depth = 2
+max_depth = 2
 # this is only for fun
 player_name = 'Henry\'s OP Bot'
 
@@ -87,9 +87,10 @@ node is the current node
 max_player (max or min)
 '''
 # build a tree from current game with a depth limit
-def minimax_ab(node, game, board, number, max_player, best_node, depth):
+def minimax_ab(node, game, board, number, max_player, depth):
     # debug_print(depth)
-    if depth == 0:
+    win = check_win(game, board)
+    if win > 0 or depth == 0:
         return get_score(game, board)
         
     # build tree and then get min or max
@@ -108,7 +109,7 @@ def minimax_ab(node, game, board, number, max_player, best_node, depth):
         # save this state
         new_node = Node(node, new_game, num, not max_player)
         node.children.append(new_node)
-        best.append(minimax_ab(new_node, copy_game(game_boards), last_move, curr_board, not max_player, best, depth - 1))
+        best.append(minimax_ab(new_node, new_game, last_move, curr_board, not max_player, depth - 1))
 
     if max_player:
         return max(best)
@@ -123,7 +124,7 @@ def optimal_move():
 
     # find best move
     root = Node(None, copy_game(game_boards), curr_board, True)
-    best = []
+    all_moves = []
     for num in range(1, 10):
         if game_boards[curr_board][num] > 0:
             continue
@@ -134,16 +135,20 @@ def optimal_move():
         # save this state
         new_node = Node(root, new_game, num, True)
         root.children.append(new_node)
-        best.append(minimax_ab(new_node, copy_game(game_boards), last_move, curr_board, False, best, depth - 1))
+        all_moves.append([minimax_ab(new_node, new_game, last_move, curr_board, False, depth - 1), num])
 
     # root.print_node()
-    debug_print(best)
-    best_outcome = max(best)
-    best_move = best.index(best_outcome)
-    debug_print('Best -> {}|{}'.format(best_outcome, best_move))
-    if best_move == 0:
-        return dummy_move()
-    return best_move
+    debug_print(all_moves)
+    best_moves = []
+    max_score = -math.inf
+    for t in all_moves:
+        max_score = max(max_score, t[0])
+    for t in all_moves:
+        if t[0] == max_score:
+            best_moves.append(t[1])
+    choice = random.choice(best_moves)
+    debug_print('-> {}'.format(choice))
+    return choice
 
 # get a random move
 def dummy_move():
