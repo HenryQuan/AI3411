@@ -1,4 +1,5 @@
 *.o
+*.log
 agent
 randt
 servt
