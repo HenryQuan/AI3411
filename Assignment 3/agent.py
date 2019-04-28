@@ -125,9 +125,11 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             # Max
             if score > alphabeta[0]:
                 alphabeta[0] = score
+                # get the top node
                 while not node.parent == None:
                     node = node.parent
                 best_node[0] = node.board
+            # Beta cut
             if alphabeta[1] <= alphabeta[0]:
                 break
 
@@ -149,9 +151,11 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
             # Min
             if score < alphabeta[1]:
                 alphabeta[1] = score
+                # get the top node
                 while not node.parent == None:
                     node = node.parent
                 best_node[0] = node.board
+            # Alpha cut
             if alphabeta[1] <= alphabeta[0]:
                 break
 
@@ -181,12 +185,18 @@ def dummy_move():
         n = random.randint(1, 9)
     return n
 
+# visualise (X, O instead of 1, 2 and 0)
+def print_player(i):
+    if i > 2:
+        return '.'
+    return ['.', 'X', 'O'][i]
+
 # print a row (modified from Zac senpai's code)
 def print_row(board, a, b, c, i, j, k):
     # The marking script doesn't seem to like this either, so just take it out to submit
-    print("", board[a][i], board[a][j], board[a][k], end = " | ")
-    print(board[b][i], board[b][j], board[b][k], end = " | ")
-    print(board[c][i], board[c][j], board[c][k])
+    print("", print_player(board[a][i]), print_player(board[a][j]), print_player(board[a][k]), end = " | ")
+    print(print_player(board[b][i]), print_player(board[b][j]), print_player(board[b][k]), end = " | ")
+    print(print_player(board[c][i]), print_player(board[c][j]), print_player(board[c][k]))
 
 # Print the entire board (modified from Zac senpai's code)
 def print_board(board):
@@ -220,6 +230,7 @@ def place(board, num, player):
     last_move = board
     game_boards[board][num] = player
     moves += 1
+    print_board(game_boards)
 
 # Parse command from server (modified from Zac senpai's code)
 def parse(string):
