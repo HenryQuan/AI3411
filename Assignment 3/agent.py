@@ -105,23 +105,27 @@ max_player (max or min)
 def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, depth):
     # depth reached 0 or game ends (player or opponent won)
     game_over = check_win(game, board)
-    # debug_print(depth)
+    debug_print(depth)
     if game_over > 0 or depth == 0:
         return get_score(game, board)
         
+    # build tree and then get min or max
+    for num in range(1, 10):
+        # illegal moves
+        if game[number][num] > 0:
+            continue
+        # place move
+        new_game = copy_game(game)
+        new_game[number][num] = 1
+        # save this state
+        new_node = Node(node, new_game, num, not max_player)
+        node.children.append(new_node)
+
+    new_depth = depth - 1
     if max_player:
-        # build tree and then get min or max
-        for num in range(1, 10):
-            # illegal moves
-            if game[number][num] > 0:
-                continue
-            # place move
-            new_game = copy_game(game)
-            new_game[number][num] = 1
-            # save this state
-            new_node = Node(node, new_game, num, not max_player)
-            node.children.append(new_node)
-            score = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
+        for child in node.children:
+            score = minimax_ab(child, child.game, number, child.board, alphabeta, not max_player, best_node, new_depth)
+            
             # Max
             if score > alphabeta[0]:
                 alphabeta[0] = score
@@ -131,22 +135,12 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
                 best_node[0] = new_node.board
             # Beta cut
             if alphabeta[1] <= alphabeta[0]:
-                continue
+                break
 
         return alphabeta[0]
     else:
-        # build tree and then get min or max
-        for num in range(1, 10):
-            # illegal moves
-            if game[number][num] > 0:
-                continue
-            # place move
-            new_game = copy_game(game)
-            new_game[number][num] = 1
-            # save this state
-            new_node = Node(node, new_game, num, not max_player)
-            node.children.append(new_node)
-            score = minimax_ab(new_node, new_game, number, num, alphabeta, not max_player, best_node, depth - 1)
+        for child in node.children:
+            score = minimax_ab(child, child.game, number, child.board, alphabeta, not max_player, best_node, new_depth)
         
             # Min
             if score < alphabeta[1]:
@@ -157,7 +151,7 @@ def minimax_ab(node, game, board, number, alphabeta, max_player, best_node, dept
                 best_node[0] = new_node.board
             # Alpha cut
             if alphabeta[1] <= alphabeta[0]:
-                continue
+                break
 
         return alphabeta[1]    
 
