@@ -9,3 +9,4 @@ Nah, I am not really good with this kind of assignment.
 
 ### Assignment 3 - Nine-Board Tic-Tac-Toe 
 Using minimax with alpha-beta pruning to write a program that can play better than you do (hopefully).
+http://inst.eecs.berkeley.edu/~cs61b/fa14/ta-materials/apps/ab_tree_practice/
