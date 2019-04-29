@@ -36,7 +36,7 @@ curr_board = 0
 min_depth = 5
 max_depth = 10
 # this is only for fun
-player_name = 'Stupid Henry'
+player_name = 'Henry'
 
 # get the optimal depth to search
 def adapative_depth(moves):
