@@ -33,8 +33,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 20
-max_depth = 40
+min_depth = 10
+max_depth = 20
 # this is only for fun
 player_name = 'Stupid Henry'
 
@@ -56,32 +56,28 @@ def minimax(node, max_player, alphabeta, depth):
     if curr_state > 0 or depth == 0:
         return node.state.get_score(curr_state)
 
+    # max or min depending on max_player
     for choice in range(1, 10):
         new_node = node.new_node(choice)
         if new_node == None:
             # already taken
             continue
         node.children.append(new_node)
-    
-    # max or min depending on max_player
-    if max_player:
-        for child in node.children:
-            # if not curr_value == 0:
-            #     debug_print(curr_value)
-            curr_value = minimax(child, not max_player, alphabeta, depth - 1)
-            alphabeta[0] = max(curr_value, alphabeta[0])
-            if alphabeta[1] <= alphabeta[0]:
+
+    best_value = -math.inf if max_player else math.inf
+    for child in node.children:
+        curr_value = minimax(child, not max_player, alphabeta, depth - 1)
+        if max_player:
+            best_value = max(curr_value, best_value)
+            alphabeta[0] = max(best_value, alphabeta[0])
+            if alphabeta[0] >= alphabeta[1]:
+                break       
+        else:
+            best_value = min(curr_value, best_value)
+            alphabeta[1] = min(best_value, alphabeta[1])
+            if alphabeta[0] >= alphabeta[1]:
                 break
-        return alphabeta[0]            
-    else:
-        for child in node.children:
-            # if not curr_value == 0:
-            #     debug_print(curr_value)
-            curr_value = minimax(child, not max_player, alphabeta, depth - 1)
-            alphabeta[1] = min(curr_value, alphabeta[1])
-            if alphabeta[1] <= alphabeta[0]:
-                break
-        return alphabeta[1]            
+    return best_value          
 
 # do some magic and get the best move
 def optimal_move():
@@ -92,7 +88,6 @@ def optimal_move():
 
     # max 9 possible choices and pick the best one
     all_choices = []
-    ab = [-math.inf, math.inf]
     for choice in range(1, 10):
         if game_boards[curr_board][choice] > 0:
             # already taken
@@ -101,10 +96,7 @@ def optimal_move():
         new_board = copy(game_boards)
         new_board[curr_board][choice] = 1
         node = Node(None, State(new_board, curr_board, choice, 1), True)
-        curr_value = minimax(node, False, ab, depth - 1)
-        ab[0] = max(curr_value, ab[0])
-        if ab[1] <= ab[0]:
-            break
+        curr_value = minimax(node, False, [-math.inf, math.inf], depth - 1)
         all_choices.append([choice, curr_value])
 
     debug_print(all_choices)

@@ -20,7 +20,24 @@ class State:
         elif curr_state == 2:
             return -100
         else:
-            return 0
+            score = 0
+            # add heuristic
+            for num in self.game[self.choice]:
+                temp = 0
+                curr = self.game[self.choice][num]
+                if curr > 0:
+                    # most win
+                    if curr in [1, 3, 7, 9]:
+                        temp = 3
+                    elif curr in [2, 4, 6, 8]:
+                        temp = 2
+                    else:
+                        temp = 4
+
+                    if curr == 2:
+                        temp *= -1
+                score += temp
+            return score
 
     def new_state(self, new_choice, player):
         if self.game[self.choice][new_choice] > 0:
