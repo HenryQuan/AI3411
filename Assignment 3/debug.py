@@ -1,3 +1,6 @@
+'''
+Easy and quick toggle to silence all print functions
+'''
 DEBUG = False
 
 def debug_print(s):
