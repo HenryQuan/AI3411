@@ -34,7 +34,7 @@ curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
 min_depth = 3
-max_depth = 5
+max_depth = 10
 # this is only for fun
 player_name = 'Stupid Henry'
 
@@ -42,7 +42,7 @@ player_name = 'Stupid Henry'
 def adapative_depth(moves):
     depth = min_depth
     debug_print('\nMoves: {}'.format(moves))
-    depth += math.floor(moves / 40 * (max_depth - min_depth))
+    depth += math.floor(moves / 81 * (max_depth - min_depth))
     return int(depth)
 
 # make a copy of current game board
@@ -50,7 +50,7 @@ def copy(game):
     return COPY.deepcopy(game)
 
 # consider optimal play
-def minimax(node, max_player, alphabeta, depth):
+def minimax(node, max_player, alpha, beta, depth):
     # depth reached or game ended
     curr_state = node.state.current_state()
     if curr_state > 0 or depth == 0:
@@ -66,17 +66,19 @@ def minimax(node, max_player, alphabeta, depth):
 
     best_value = -math.inf if max_player else math.inf
     for child in node.children:
-        curr_value = minimax(child, not max_player, copy(alphabeta), depth - 1)
+        curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
         if max_player:
             best_value = max(curr_value, best_value)
-            # alphabeta[0] = max(best_value, alphabeta[0])
-            # if alphabeta[0] >= alphabeta[1]:
-            #     break       
+            alpha = max(alpha, curr_value)
+            # beta cut
+            if beta <= alpha:
+                break       
         else:
             best_value = min(curr_value, best_value)
-            # alphabeta[1] = min(best_value, alphabeta[1])
-            # if alphabeta[0] >= alphabeta[1]:
-            #     break
+            beta = min(beta, curr_value)
+            # alpha cut
+            if beta <= alpha:
+                break
     return best_value          
 
 # do some magic and get the best move
@@ -96,7 +98,7 @@ def optimal_move():
         new_board = copy(game_boards)
         new_board[curr_board][choice] = 1
         node = Node(None, State(new_board, curr_board, choice, 1), True)
-        curr_value = minimax(node, False, [-math.inf, math.inf], depth - 1)
+        curr_value = minimax(node, False, -math.inf, math.inf, depth - 1)
         all_choices.append([choice, curr_value])
 
     debug_print(all_choices)
