@@ -33,8 +33,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 10
-max_depth = 20
+min_depth = 3
+max_depth = 8
 # this is only for fun
 player_name = 'Stupid Henry'
 
@@ -42,7 +42,7 @@ player_name = 'Stupid Henry'
 def adapative_depth(moves):
     depth = min_depth
     debug_print('\nMoves: {}'.format(moves))
-    depth += math.floor(moves / 81 * (max_depth - min_depth))
+    depth += math.floor(moves / 40 * (max_depth - min_depth))
     return int(depth)
 
 # make a copy of current game board
@@ -54,7 +54,7 @@ def minimax(node, max_player, alphabeta, depth):
     # depth reached or game ended
     curr_state = node.state.current_state()
     if curr_state > 0 or depth == 0:
-        return node.state.get_score(curr_state)
+        return node.state.get_score()
 
     # max or min depending on max_player
     for choice in range(1, 10):
@@ -66,7 +66,7 @@ def minimax(node, max_player, alphabeta, depth):
 
     best_value = -math.inf if max_player else math.inf
     for child in node.children:
-        curr_value = minimax(child, not max_player, alphabeta, depth - 1)
+        curr_value = minimax(child, not max_player, copy(alphabeta), depth - 1)
         if max_player:
             best_value = max(curr_value, best_value)
             alphabeta[0] = max(best_value, alphabeta[0])
