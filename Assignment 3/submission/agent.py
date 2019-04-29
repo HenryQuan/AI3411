@@ -201,7 +201,7 @@ def parse(string):
         place(curr_board, int(args[0]), 2)
         return play()
     elif command == 'win':
-        print('{} wins :)\n'.format(player_name))
+        debug_print('{} wins :)\n'.format(player_name))
         return -1
     elif command == 'loss':
         return -1
