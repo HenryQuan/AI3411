@@ -6,9 +6,10 @@ Assignment 3 Nine-board Tic-Tac-Toe
 Yiheng Quan Z5098268
 
 I checked Zac senpai's starter code and got some ideas about what's going on.
-My current solution to use minimax and alpha-beta pruning. Gradually increas ethe depth when the game is closer to an end.
+My current solution to use minimax and alpha-beta pruning. Gradually increas the depth when the game is closer to an end.
 
-The heuristic function will be measuring 'most wins' and the cost is always one for all moves.
+The heuristic function will be measuring 'most wins' and the cost is always one for all moves (so ignored).
+It definitely plays better than me but nearly impossible to win lookt
 '''
 
 import socket
@@ -16,7 +17,7 @@ import random, math
 import sys, copy as COPY
 # some modules to help this
 from node import Node
-from debug import debug_print
+from debug import *
 from state import State
 
 '''
@@ -33,7 +34,7 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 5
+min_depth = 3
 max_depth = 10
 # this is only for fun
 player_name = 'Henry'
@@ -169,7 +170,7 @@ def place(board, num, player):
     last_move = board
     game_boards[board][num] = player
     moves += 1
-    print_board(game_boards)
+    if DEBUG: print_board(game_boards)
 
 # Parse command from server (modified from Zac senpai's code)
 def parse(string):
