@@ -34,7 +34,7 @@ curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
 min_depth = 3
-max_depth = 8
+max_depth = 5
 # this is only for fun
 player_name = 'Stupid Henry'
 
