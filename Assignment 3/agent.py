@@ -33,8 +33,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
-max_depth = 8
+min_depth = 4
+max_depth = 4
 # this is only for fun
 player_name = 'Stupid Henry'
 
@@ -69,14 +69,14 @@ def minimax(node, max_player, alphabeta, depth):
         curr_value = minimax(child, not max_player, copy(alphabeta), depth - 1)
         if max_player:
             best_value = max(curr_value, best_value)
-            alphabeta[0] = max(best_value, alphabeta[0])
-            if alphabeta[0] >= alphabeta[1]:
-                break       
+            # alphabeta[0] = max(best_value, alphabeta[0])
+            # if alphabeta[0] >= alphabeta[1]:
+            #     break       
         else:
             best_value = min(curr_value, best_value)
-            alphabeta[1] = min(best_value, alphabeta[1])
-            if alphabeta[0] >= alphabeta[1]:
-                break
+            # alphabeta[1] = min(best_value, alphabeta[1])
+            # if alphabeta[0] >= alphabeta[1]:
+            #     break
     return best_value          
 
 # do some magic and get the best move

@@ -15,7 +15,13 @@ class State:
         print('B{}C{}P{}'.format(self.board, self.choice, self.player))
 
     def get_score(self):
-        return self._heuristic()
+        win = self.current_state()
+        if win == 1:
+            return 100
+        elif win == 2:
+            return -100
+        return 0
+        # return self._heuristic()
 
     def new_state(self, new_choice, player):
         if self.game[self.choice][new_choice] > 0:
