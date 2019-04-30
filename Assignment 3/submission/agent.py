@@ -37,8 +37,8 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 5
-max_depth = 19
+min_depth = 7
+max_depth = 11
 # this is only for fun
 player_name = 'Henry'
 
@@ -51,7 +51,10 @@ def adapative_depth(moves):
 
 # make a copy of current game board
 def copy(game):
-    return json.loads(json.dumps(game))
+    new_game = [[0] * 10]
+    for num in range(1, 10):
+        new_game.append(game[num][:])
+    return new_game
 
 # consider optimal play
 def minimax(node, max_player, alpha, beta, depth):
@@ -242,4 +245,5 @@ def main():
         s.close()
     
 if __name__ == '__main__':
-    cProfile.run('main()')
+    main()
+    #cProfile.run('main()')

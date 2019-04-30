@@ -26,12 +26,18 @@ class State:
         else:
             return self._heuristic()
 
+    def _copy(self, game):
+        new_game = [[0] * 10]
+        for num in range(1, 10):
+            new_game.append(game[num][:])
+        return new_game
+
     def new_state(self, new_choice, player):
         if self.game[self.choice][new_choice] > 0:
             # illegal
             return None
         # copy current board and place new choice
-        new_game = json.loads(json.dumps(self.game))
+        new_game = self._copy(self.game)
         new_game[self.choice][new_choice] = player
         return State(new_game, self.choice, new_choice, player)
 
@@ -88,11 +94,11 @@ class State:
                 curr = curr_game[num]
                 if curr > 0:
                     if num in [1, 3, 7, 9]:
-                        temp = 20
+                        temp = 25
                     elif num in [2, 4, 6, 8]:
-                        temp = 30
+                        temp = 50
                     else:
-                        temp = 40
+                        temp = 75
                     
                     if curr == 2:
                         temp = -temp
