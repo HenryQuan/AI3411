@@ -17,6 +17,7 @@ It needs a better heuristic function.
 import socket
 import random, math
 import sys, json
+import cProfile
 # some modules to help this
 from node import Node
 from debug import *
@@ -241,4 +242,4 @@ def main():
         s.close()
     
 if __name__ == '__main__':
-    main()
+    cProfile.run('main()')
