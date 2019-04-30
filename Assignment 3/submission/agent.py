@@ -37,7 +37,7 @@ curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
 min_depth = 3
-max_depth = 3
+max_depth = 19
 # this is only for fun
 player_name = 'Henry'
 
@@ -54,22 +54,21 @@ def copy(game):
 
 # consider optimal play
 def minimax(node, max_player, alpha, beta, depth):
+    minimax.counter += 1
     # depth reached or game ended
     curr_state = node.state.current_state()
     if curr_state > 0 or depth == 0:
         return node.state.get_score()
 
     # max or min depending on max_player
-    for choice in range(1, 10):
+    best_value = -math.inf if max_player else math.inf
+    for choice in [5, 1, 3, 7, 9, 2, 4, 6, 8]:
         new_node = node.new_node(choice)
         if new_node == None:
             # already taken
             continue
-        node.children.append(new_node)
 
-    best_value = -math.inf if max_player else math.inf
-    for child in node.children:
-        curr_value = minimax(child, not max_player, alpha, beta, depth - 1)
+        curr_value = minimax(new_node, not max_player, alpha, beta, depth - 1)
         if max_player:
             best_value = max(curr_value, best_value)
             alpha = max(alpha, curr_value)
@@ -82,6 +81,7 @@ def minimax(node, max_player, alpha, beta, depth):
             # alpha cut
             if beta <= alpha:
                 break
+
     return best_value          
 
 # do some magic and get the best move
@@ -90,10 +90,10 @@ def optimal_move():
     depth = adapative_depth(moves)
     debug_print('Depth: {}'.format(depth))
     debug_print('Board: {}'.format(curr_board))
-
+    minimax.counter = 0
     # max 9 possible choices and pick the best one
     all_choices = []
-    for choice in range(1, 10):
+    for choice in [5, 1, 3, 7, 9, 2, 4, 6, 8]:
         if game_boards[curr_board][choice] > 0:
             # already taken
             continue
@@ -104,6 +104,7 @@ def optimal_move():
         curr_value = minimax(node, False, -math.inf, math.inf, depth - 1)
         all_choices.append([choice, curr_value])
 
+    debug_print('minimax -> {}'.format(minimax.counter))
     debug_print(all_choices)
     best_moves = []
     max_value = -math.inf
