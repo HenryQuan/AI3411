@@ -37,7 +37,7 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 7
+min_depth = 3
 max_depth = 11
 # this is only for fun
 player_name = 'Henry'
@@ -66,7 +66,7 @@ def minimax(node, max_player, alpha, beta, depth):
 
     # max or min depending on max_player
     best_value = -math.inf if max_player else math.inf
-    for choice in [5, 1, 3, 7, 9, 2, 4, 6, 8]:
+    for choice in range(1, 10):
         new_node = node.new_node(choice)
         if new_node == None:
             # already taken
@@ -97,7 +97,7 @@ def optimal_move():
     minimax.counter = 0
     # max 9 possible choices and pick the best one
     all_choices = []
-    for choice in [5, 1, 3, 7, 9, 2, 4, 6, 8]:
+    for choice in range(1, 10):
         if game_boards[curr_board][choice] > 0:
             # already taken
             continue

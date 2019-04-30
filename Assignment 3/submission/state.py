@@ -86,7 +86,7 @@ class State:
 
     def _heuristic(self):
         score = 0
-        for board in range(1, 10):
+        for board in [self.board, self.choice]:
             curr_game = self.game[board]
             # most win heuristic (better than nothing)
             for num in range(1, 10):
@@ -94,49 +94,55 @@ class State:
                 curr = curr_game[num]
                 if curr > 0:
                     if num in [1, 3, 7, 9]:
-                        temp = 25
+                        temp = 15
                     elif num in [2, 4, 6, 8]:
-                        temp = 50
+                        temp = 30
                     else:
-                        temp = 75
+                        temp = 50
                     
                     if curr == 2:
                         temp = -temp
+                    if board == self.choice:
+                        temp *= 5
                 score += temp
 
-        # # check rows
-        # for i in range(1, 4):
-        #     j = i * 3 - 2
-        #     # X . X, X X ., and . X X
-        #     if self._same(curr_game, [j, j + 1]) and self._empty(curr_game, j + 2):
-        #         score += self._positive(curr_game[j]) * 100
-        #     if self._same(curr_game, [j + 1, j + 2]) and self._empty(curr_game, j):
-        #         score += self._positive(curr_game[j]) * 100
-        #     if self._same(curr_game, [j, j + 2]) and self._empty(curr_game, j + 1):
-        #         score += self._positive(curr_game[j]) * 50
+            temp = 0
+            # check rows
+            for i in range(1, 4):
+                j = i * 3 - 2
+                # X . X, X X ., and . X X
+                if self._same(curr_game, [j, j + 1]) and self._empty(curr_game, j + 2):
+                    temp += self._positive(curr_game[j]) * 50
+                elif self._same(curr_game, [j + 1, j + 2]) and self._empty(curr_game, j):
+                    temp += self._positive(curr_game[j]) * 50
+                elif self._same(curr_game, [j, j + 2]) and self._empty(curr_game, j + 1):
+                    temp += self._positive(curr_game[j]) * 50
 
-        # # check columns
-        # for i in range(1, 4):
-        #     if self._same(curr_game, [i, i + 3]) and self._empty(curr_game, i + 6):
-        #         score += self._positive(curr_game[i]) * 100
-        #     if self._same(curr_game, [i + 3, i + 6]) and self._empty(curr_game, i):
-        #         score += self._positive(curr_game[i]) * 100
-        #     if self._same(curr_game, [i, i + 6]) and self._empty(curr_game, i + 3):
-        #         score += self._positive(curr_game[i]) * 50
-        
-        # # check diagonals
-        # if self._same(curr_game, [1, 9]) and self._empty(curr_game, 5):
-        #     score += self._positive(curr_game[1]) * 100
-        # if self._same(curr_game, [1, 5]) and self._empty(curr_game, 9):
-        #     score += self._positive(curr_game[1]) * 200
-        # if self._same(curr_game, [5, 9]) and self._empty(curr_game, 1):
-        #     score += self._positive(curr_game[5]) * 200
-        
-        # if self._same(curr_game, [3, 7]) and self._empty(curr_game, 5):
-        #     score += self._positive(curr_game[3]) * 100
-        # if self._same(curr_game, [3, 5]) and self._empty(curr_game, 7):
-        #     score += self._positive(curr_game[3]) * 200
-        # if self._same(curr_game, [5, 7]) and self._empty(curr_game, 3):
-        #     score += self._positive(curr_game[5]) * 200
+            # check columns
+            for i in range(1, 4):
+                if self._same(curr_game, [i, i + 3]) and self._empty(curr_game, i + 6):
+                    temp += self._positive(curr_game[i]) * 50
+                elif self._same(curr_game, [i + 3, i + 6]) and self._empty(curr_game, i):
+                    temp += self._positive(curr_game[i]) * 50
+                elif self._same(curr_game, [i, i + 6]) and self._empty(curr_game, i + 3):
+                    temp += self._positive(curr_game[i]) * 50
+            
+            # check diagonals
+            if self._same(curr_game, [1, 9]) and self._empty(curr_game, 5):
+                temp += self._positive(curr_game[1]) * 100
+            elif self._same(curr_game, [1, 5]) and self._empty(curr_game, 9):
+                temp += self._positive(curr_game[1]) * 100
+            elif self._same(curr_game, [5, 9]) and self._empty(curr_game, 1):
+                temp += self._positive(curr_game[5]) * 100
+            
+            if self._same(curr_game, [3, 7]) and self._empty(curr_game, 5):
+                temp += self._positive(curr_game[3]) * 100
+            elif self._same(curr_game, [3, 5]) and self._empty(curr_game, 7):
+                temp += self._positive(curr_game[3]) * 100
+            elif self._same(curr_game, [5, 7]) and self._empty(curr_game, 3):
+                temp += self._positive(curr_game[5]) * 100
 
+            if board == self.choice:
+                temp *= 5
+            score += temp
         return score
