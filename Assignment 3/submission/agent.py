@@ -37,7 +37,7 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 7
+min_depth = 5
 max_depth = 11
 # this is only for fun
 player_name = 'Henry'

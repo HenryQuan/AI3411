@@ -14,7 +14,6 @@ class Node:
         # more moves
         self.children = []
 
-
     # get a new node with one depth deeper
     def new_node(self, new_choice):
         new_state = self.state.new_state(new_choice, 2 if self.max_player else 1)
