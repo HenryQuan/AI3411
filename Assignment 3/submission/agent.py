@@ -16,7 +16,7 @@ It needs a better heuristic function.
 
 import socket
 import random, math
-import sys, copy as COPY
+import sys, json
 # some modules to help this
 from node import Node
 from debug import *
@@ -36,7 +36,7 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
+min_depth = 5
 max_depth = 19
 # this is only for fun
 player_name = 'Henry'
@@ -50,7 +50,7 @@ def adapative_depth(moves):
 
 # make a copy of current game board
 def copy(game):
-    return COPY.deepcopy(game)
+    return json.loads(json.dumps(game))
 
 # consider optimal play
 def minimax(node, max_player, alpha, beta, depth):

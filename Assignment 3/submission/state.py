@@ -2,7 +2,7 @@
 '''
 Save a copy of current game board and get score for it
 '''
-import copy
+import json
 
 class State:
     # game is a copy of the entire board
@@ -31,7 +31,7 @@ class State:
             # illegal
             return None
         # copy current board and place new choice
-        new_game = copy.deepcopy(self.game)
+        new_game = json.loads(json.dumps(self.game))
         new_game[self.choice][new_choice] = player
         return State(new_game, self.choice, new_choice, player)
 
