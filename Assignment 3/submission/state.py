@@ -80,23 +80,23 @@ class State:
 
     def _heuristic(self):
         score = 0
-        curr_game = self.game[self.board]
-
-        # most win heuristic (better than nothing)
-        for num in range(1, 10):
-            curr = curr_game[num]
-            temp = 0
-            if curr > 0:
-                if num in [1, 3, 7, 9]:
-                    temp = 75
-                elif num in [2, 4, 6, 8]:
-                    temp = 50
-                else:
-                    temp = 100
-                
-                if curr == 2:
-                    temp = -temp
-            score += temp
+        for board in range(1, 10):
+            curr_game = self.game[board]
+            # most win heuristic (better than nothing)
+            for num in range(1, 10):
+                temp = 0
+                curr = curr_game[num]
+                if curr > 0:
+                    if num in [1, 3, 7, 9]:
+                        temp = 20
+                    elif num in [2, 4, 6, 8]:
+                        temp = 30
+                    else:
+                        temp = 40
+                    
+                    if curr == 2:
+                        temp = -temp
+                score += temp
 
         # # check rows
         # for i in range(1, 4):
