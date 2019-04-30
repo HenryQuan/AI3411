@@ -37,7 +37,7 @@ last_move = 0
 curr_board = 0
 
 # set the max/min depth we can reach (free feel to adjust these two values)
-min_depth = 3
+min_depth = 7
 max_depth = 11
 # this is only for fun
 player_name = 'Henry'
@@ -62,31 +62,36 @@ def minimax(node, max_player, alpha, beta, depth):
     # depth reached or game ended
     curr_state = node.state.current_state()
     if curr_state > 0 or depth == 0:
-        return node.state.get_score()
+        return node.state.score
 
     # max or min depending on max_player
-    best_value = -math.inf if max_player else math.inf
-    for choice in range(1, 10):
-        new_node = node.new_node(choice)
-        if new_node == None:
-            # already taken
-            continue
+   
+    if max_player:
+        for choice in range(1, 10):
+            new_node = node.new_node(choice)
+            if new_node == None:
+                # already taken
+                continue
 
-        curr_value = minimax(new_node, not max_player, alpha, beta, depth - 1)
-        if max_player:
-            best_value = max(curr_value, best_value)
+            curr_value = minimax(new_node, not max_player, alpha, beta, depth - 1)
             alpha = max(alpha, curr_value)
             # beta cut
-            if beta <= alpha:
-                break       
-        else:
-            best_value = min(curr_value, best_value)
+            if alpha >= beta:
+                break
+        return alpha    
+    else:
+        for choice in range(1, 10):
+            new_node = node.new_node(choice)
+            if new_node == None:
+                # already taken
+                continue
+
+            curr_value = minimax(new_node, not max_player, alpha, beta, depth - 1)
             beta = min(beta, curr_value)
             # alpha cut
-            if beta <= alpha:
-                break
-
-    return best_value          
+            if alpha >= beta:
+                break   
+        return beta  
 
 # do some magic and get the best move
 def optimal_move():
@@ -245,5 +250,5 @@ def main():
         s.close()
     
 if __name__ == '__main__':
-    main()
-    #cProfile.run('main()')
+    #main()
+    cProfile.run('main()')
