@@ -249,5 +249,7 @@ def main():
         s.close()
     
 if __name__ == '__main__':
-    #main()
-    cProfile.run('main()')
+    if DEBUG:
+        cProfile.run('main()')
+    else:
+        main()

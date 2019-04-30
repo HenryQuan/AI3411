@@ -20,6 +20,9 @@ int move[MAX_MOVE+1];
 int player;
 int m;
 
+int win_player = 0;
+int win_opponent = 0;
+
 /*********************************************************//*
    Print usage information and exit
 */
