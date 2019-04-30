@@ -62,10 +62,9 @@ def minimax(node, max_player, alpha, beta, depth):
     # depth reached or game ended
     curr_state = node.state.current_state()
     if curr_state > 0 or depth == 0:
-        return node.state.score
+        return node.state.get_score()
 
     # max or min depending on max_player
-   
     if max_player:
         for choice in range(1, 10):
             new_node = node.new_node(choice)

@@ -13,7 +13,6 @@ class State:
         self.board = current_board
         self.choice = choice
         self.player = player
-        self.score = self.get_score()
 
     def human(self):
         print('B{}C{}P{}'.format(self.board, self.choice, self.player))
@@ -100,6 +99,10 @@ class State:
                     elif curr == 2:
                         opponent += 1
                 temp = weight[player][opponent]
+                if num == self.board:
+                    temp *= 2
+                elif num == self.choice:
+                    temp *= 3
                 score += temp
         
         # curr_game = self.game[self.board]
