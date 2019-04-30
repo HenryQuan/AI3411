@@ -86,25 +86,22 @@ class State:
 
     def _heuristic(self):
         score = 0
-        for board in [self.board, self.choice]:
-            curr_game = self.game[board]
-            # most win heuristic (better than nothing)
-            for num in range(1, 10):
-                temp = 0
-                curr = curr_game[num]
-                if curr > 0:
-                    if num in [1, 3, 7, 9]:
-                        temp = 15
-                    elif num in [2, 4, 6, 8]:
-                        temp = 30
-                    else:
-                        temp = 50
-                    
-                    if curr == 2:
-                        temp = -temp
-                    if board == self.choice:
-                        temp *= 5
-                score += temp
+        curr_game = self.game[self.choice]
+        # most win heuristic (better than nothing)
+        for num in range(1, 10):
+            temp = 0
+            curr = curr_game[num]
+            if curr > 0:
+                if num in [1, 3, 7, 9]:
+                    temp = 10
+                elif num in [2, 4, 6, 8]:
+                    temp = 15
+                else:
+                    temp = 20
+                
+                if curr == 2:
+                    temp = -temp
+            score += temp
 
             temp = 0
             # check rows
@@ -112,37 +109,34 @@ class State:
                 j = i * 3 - 2
                 # X . X, X X ., and . X X
                 if self._same(curr_game, [j, j + 1]) and self._empty(curr_game, j + 2):
-                    temp += self._positive(curr_game[j]) * 50
+                    temp += self._positive(curr_game[j]) * 30
                 elif self._same(curr_game, [j + 1, j + 2]) and self._empty(curr_game, j):
-                    temp += self._positive(curr_game[j]) * 50
+                    temp += self._positive(curr_game[j]) * 30
                 elif self._same(curr_game, [j, j + 2]) and self._empty(curr_game, j + 1):
-                    temp += self._positive(curr_game[j]) * 50
+                    temp += self._positive(curr_game[j]) * 30
 
             # check columns
             for i in range(1, 4):
                 if self._same(curr_game, [i, i + 3]) and self._empty(curr_game, i + 6):
-                    temp += self._positive(curr_game[i]) * 50
+                    temp += self._positive(curr_game[i]) * 30
                 elif self._same(curr_game, [i + 3, i + 6]) and self._empty(curr_game, i):
-                    temp += self._positive(curr_game[i]) * 50
+                    temp += self._positive(curr_game[i]) * 30
                 elif self._same(curr_game, [i, i + 6]) and self._empty(curr_game, i + 3):
-                    temp += self._positive(curr_game[i]) * 50
+                    temp += self._positive(curr_game[i]) * 30
             
             # check diagonals
             if self._same(curr_game, [1, 9]) and self._empty(curr_game, 5):
-                temp += self._positive(curr_game[1]) * 100
+                temp += self._positive(curr_game[1]) * 50
             elif self._same(curr_game, [1, 5]) and self._empty(curr_game, 9):
-                temp += self._positive(curr_game[1]) * 100
+                temp += self._positive(curr_game[1]) * 50
             elif self._same(curr_game, [5, 9]) and self._empty(curr_game, 1):
-                temp += self._positive(curr_game[5]) * 100
+                temp += self._positive(curr_game[5]) * 50
             
             if self._same(curr_game, [3, 7]) and self._empty(curr_game, 5):
-                temp += self._positive(curr_game[3]) * 100
+                temp += self._positive(curr_game[3]) * 50
             elif self._same(curr_game, [3, 5]) and self._empty(curr_game, 7):
-                temp += self._positive(curr_game[3]) * 100
+                temp += self._positive(curr_game[3]) * 50
             elif self._same(curr_game, [5, 7]) and self._empty(curr_game, 3):
-                temp += self._positive(curr_game[5]) * 100
-
-            if board == self.choice:
-                temp *= 5
+                temp += self._positive(curr_game[5]) * 50
             score += temp
         return score
