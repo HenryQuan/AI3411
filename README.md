@@ -9,4 +9,5 @@ Nah, I am not really good with this kind of assignment.
 
 ### [Assignment 3 - Nine-Board Tic-Tac-Toe](https://github.com/HenryQuan/AI3411/tree/master/Assignment%203)
 Using minimax with alpha-beta pruning to write a program that can play better than you do (hopefully).
-http://inst.eecs.berkeley.edu/~cs61b/fa14/ta-materials/apps/ab_tree_practice/
+
+My implementation has major performance issues (many unneccessary copies). It can win against average human but against AI, it is quite week. It does win sometimes but usually, it needs to search way deeper than its opponent. If I have more time, I will improve this and probably make a [game](https://github.com/HenryQuan/TicTacToe-Ultimate) with flutter.
