@@ -9,7 +9,7 @@ I checked Zac senpai's starter code and got some ideas about what's going on.
 My current solution to use minimax and alpha-beta pruning. Gradually increas the depth when the game is closer to an end.
 
 The heuristic function will be measuring 'most wins' and the cost is always one for all moves (so ignored).
-It definitely plays better than me but still nearly impossible to win against lookt.
+It definitely plays better than me and it is about 50 50 against lookt same depth.
 My friends tried to play against it but they all lost to depth 3 bot.
 It needs a better heuristic function.
 '''
